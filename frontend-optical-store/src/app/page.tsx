@@ -1,12 +1,11 @@
-import Header from "./components/header";
-
+import Header from "./components/header"
 export default function Home() {
   return (
     <div>
       <Header />
       <div
         className="relative bg-cover bg-center h-screen flex flex-col justify-center items-center text-white"
-        style={{ backgroundImage: "url('/bg-hero.png')" }} // coloque sua imagem aqui
+        style={{ backgroundImage: "url('/img/bg-hero.png')" }} // coloque sua imagem aqui
       >
         <div className="text-center px-4">
           <h1 className="text-5xl md:text-6xl font-extrabold tracking-widest">
@@ -20,7 +19,6 @@ export default function Home() {
             Compre Agora
           </button>
         </div>
-
         {/* Ícone de scroll para baixo */}
         <div className="absolute bottom-10 animate-bounce">
           <div className="w-10 h-10 rounded-full bg-gray-800 bg-opacity-70 flex items-center justify-center">

@@ -55,6 +55,80 @@ export default function Home() {
           </svg>
         </a>
       </div>
+      <div className="flex flex-col md:flex-row items-start bg-white p-8 gap-8">
+      {/* another section */}
+        {/* Left Panel */}
+        <div className="w-full md:w-1/2 relative">
+          <div className="bg-[#3B8BA5] text-white p-4 flex items-center justify-between">
+            <h2 className="text-xl font-bold tracking-wider">LOJA</h2>
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-[#3B8BA5] font-bold text-sm shadow-md">
+              <span>Ótica<br />Olhos do Bem</span>
+            </div>
+          </div>
+          <img
+            src="/path/to/your/image.png"
+            alt="Ótica loja"
+            className="w-full object-cover h-[300px] md:h-full"
+          />
+        </div>
+
+        {/* Right Panel */}
+        <div className="w-full md:w-1/2">
+          <h1 className="text-3xl font-bold mb-4">A ÓTICA OLHOS DO BEM</h1>
+          <p className="text-gray-700 mb-4">
+            Nós da Ótica Olhos do Bem, priorizamos as pessoas e o nosso objetivo é levar
+            uma melhor qualidade de vida através da boa visão. Considerando as mudanças
+            habituais das últimas gerações, sabemos o grande impacto que a tecnologia dos
+            computadores, celulares, tablets e as longas jornadas de trabalho podem causar
+            ao sistema visual.
+          </p>
+          <p className="text-gray-700">
+            Para isso, contamos com uma equipe de profissionais especialistas qualificados
+            no segmento ótico, que podem garantir o máximo de conforto, beleza e tecnologia
+            na escolha de armações e lentes.
+          </p>
+        </div>
+      </div>
+
+      {/* another section */}
+      <div className="flex flex-wrap justify-center gap-8 py-10 bg-white">
+      
+      {/* Item 1 */}
+      <div className="flex flex-col items-center text-center max-w-[150px]">
+        <svg className="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M9 20H4v-2a3 3 0 015.356-1.857M9 20v-2a3 3 0 013-3h0a3 3 0 013 3v2M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <p className="mt-2 text-gray-700 font-medium text-sm">Priorizamos as Pessoas</p>
+      </div>
+
+      {/* Item 2 */}
+      <div className="flex flex-col items-center text-center max-w-[150px]">
+        <svg className="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path d="M14 10h4.764a1 1 0 01.832 1.555l-5.528 8.06a1 1 0 01-1.696 0l-5.528-8.06A1 1 0 017.236 10H12" />
+        </svg>
+        <p className="mt-2 text-gray-700 font-medium text-sm">Qualidade de Vida</p>
+      </div>
+
+      {/* Item 3 */}
+      <div className="flex flex-col items-center text-center max-w-[150px]">
+        <svg className="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path d="M12 2l8 4v6c0 5.25-3.15 10.74-8 12-4.85-1.26-8-6.75-8-12V6l8-4z" />
+          <path d="M9 12l2 2 4-4" />
+        </svg>
+        <p className="mt-2 text-gray-700 font-medium text-sm">Produtos de Qualidade</p>
+      </div>
+
+      {/* Item 4 */}
+      <div className="flex flex-col items-center text-center max-w-[150px]">
+        <svg className="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path d="M12 2a7 7 0 00-7 7c0 4.5 7 11 7 11s7-6.5 7-11a7 7 0 00-7-7z" />
+          <path d="M12 8v.01" />
+          <path d="M12 10h.01" />
+        </svg>
+        <p className="mt-2 text-gray-700 font-medium text-sm">Profissionais Especialistas</p>
+      </div>
+    </div>
+
     </div>
   );
 }

@@ -35,7 +35,7 @@
 
 export default function AboutSection() {
   return (
-    <section id="sobre-nos" className="bg-blue-100 py-16 px-6 lg:px-20">
+    <section id="sobre-nos" className="bg-white-100 py-16 px-6 lg:px-20">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10">
         {/* Imagem com selo */}
         <div className="relative w-full lg:w-1/2">
@@ -54,7 +54,7 @@ export default function AboutSection() {
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
             Somos mais que uma Ótica
           </h2>
-          <p className="text-gray-700 mb-6 leading-relaxed">
+          <p className="text-gray-700 mb-6 leading-relaxed text-justify">
             A Ótica Satiko é dedicada em oferecer produtos de qualidade. A Ótica Satiko traz um atendimento personalizado com foco no conforto e estilo dos nossos clientes. Trabalhamos com as melhores lentes e as melhores armações do mercado óptico, utilizando tecnologia de ponta para maximizar a sua experiência visual. Nosso compromisso é transformar a maneira como você vê o mundo, com atenção plena ao estilo e às suas necessidades e visão. Vamos te valorizar e destacar a qualidade e sua identidade com nosso atendimento!
           </p>
           <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold transition cursor-pointer hover:bg-blue-700 active:scale-95 active:translate-y-[1px]">

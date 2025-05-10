@@ -1,3 +1,5 @@
+import ScrollIndicator from "./ScrollIndicator";
+
 export default function HeroSection() {
   return (
     <div
@@ -16,6 +18,7 @@ export default function HeroSection() {
           Compre Agora
         </button>
       </div>
+      <ScrollIndicator />
     </div>
   );
 }

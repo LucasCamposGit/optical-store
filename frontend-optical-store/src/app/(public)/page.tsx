@@ -7,7 +7,6 @@ import BrandsSection from "./components/BrandsSection";
 import DiferencialSection from "./components/DiferencialSection";
 import StoreSection from "./components/StoreSection";
 import ContactSection from "./components/ContactSection";
-import ScrollIndicator from "./components/ScrollIndicator";
 import WhatsAppButton from "./components/WhatsAppButton";
 // import WhatsappSection from "./components/WhatsAppButton";
 import FeaturesSection from "./components/FeaturesSection";
@@ -24,7 +23,6 @@ export default function Home() {
       <DiferencialSection />
       <StoreSection />
       <ContactSection />
-      <ScrollIndicator />
       <WhatsAppButton />
       <FeaturesSection />
     </div >

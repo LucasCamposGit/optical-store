@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function LojaSection() {
   return (
     <section id="loja" className="py-20 px-4 text-center bg-white">
@@ -23,9 +25,11 @@ export default function LojaSection() {
         {/* Card da loja */}
         <div className="mt-10 flex justify-center">
           <div className="relative w-full max-w-sm rounded-lg overflow-hidden shadow-lg">
-            <img
+            <Image
               src="/img/oculos-card.png"
               alt="Loja de Óculos"
+              width={400}
+              height={256}
               className="w-full h-64 object-cover"
             />
             {/* Texto sobreposto */}

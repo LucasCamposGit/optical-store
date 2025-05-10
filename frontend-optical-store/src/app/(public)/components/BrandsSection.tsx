@@ -1,6 +1,7 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import Image from "next/image";
 import "swiper/css";
 import "swiper/css/navigation";
 
@@ -36,9 +37,11 @@ export default function PartnersSection() {
 
           {["brand1.png", "brand2.png", "brand3.png", "brand4.png", "brand5.png"].map((logo, i) => (
             <SwiperSlide key={i} className="flex justify-center items-center w-[180px]">
-              <img
+              <Image
                 src={`/img/${logo}`}
-                alt={`Logo ${i}`}
+                alt={`Logo ${i+1}`}
+                width={180}
+                height={120}
                 className="w-full h-30 object-contain mx-auto"
               />
             </SwiperSlide>

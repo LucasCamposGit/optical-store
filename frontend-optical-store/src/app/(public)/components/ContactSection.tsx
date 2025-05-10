@@ -1,6 +1,7 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import Image from "next/image";
 import "swiper/css";
 import "swiper/css/navigation";
 
@@ -69,9 +70,11 @@ export default function ContatoSection() {
         <div className="bg-white border border-gray-200 p-6 rounded-2xl shadow-lg h-full flex flex-col justify-between transition-transform hover:scale-[1.05] hover:shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <img
+              <Image
                 src={`/img/avatar-${i + 1}.jpg`} // você pode adaptar o caminho
                 alt={d.nome}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full object-cover"
               />
               <div>
@@ -151,8 +154,11 @@ export default function ContatoSection() {
 
         {/* Card de localização */}
         <div className="absolute top-8 left-1/2 -translate-x-1/2 md:left-20 md:translate-x-0 bg-white p-4 md:p-6 rounded-xl shadow-xl max-w-xs w-[90%]">
-          <img
+          <Image
             src="/img/loja.png"
+            alt="Loja Centro Ótico Satiko"
+            width={400}
+            height={200}
             className="w-full h-32 object-cover rounded-md mb-3"
           />
           <h3 className="text-lg font-semibold text-black mb-1">Centro Ótico Satiko</h3>

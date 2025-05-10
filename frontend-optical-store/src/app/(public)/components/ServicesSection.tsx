@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function FeaturesSection() {
   return (
     <section id="servicos" className="bg-gradient-to-br from-blue-50 to-blue-100 py-16 px-6 lg:px-20">
@@ -11,7 +13,7 @@ export default function FeaturesSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Serviço 1 */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
-            <img src="/img/service1.png" alt="Exames de Vista" className="w-full h-56 object-cover" />
+            <Image src="/img/service1.png" alt="Exames de Vista" width={400} height={224} className="w-full h-56 object-cover" />
             <div className="p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-2">Exames de Vista</h3>
               <p className="text-gray-600">
@@ -22,7 +24,7 @@ export default function FeaturesSection() {
 
           {/* Serviço 2 */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
-            <img src="/img/service2.png" alt="Ajustes e Manutenção" className="w-full h-56 object-cover" />
+            <Image src="/img/service2.png" alt="Ajustes e Manutenção" width={400} height={224} className="w-full h-56 object-cover" />
             <div className="p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-2">Ajustes e Manutenção</h3>
               <p className="text-gray-600">
@@ -33,7 +35,7 @@ export default function FeaturesSection() {
 
           {/* Serviço 3 */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
-            <img src="/img/service3.png" alt="Consultoria Personalizada" className="w-full h-56 object-cover" />
+            <Image src="/img/service3.png" alt="Consultoria Personalizada" width={400} height={224} className="w-full h-56 object-cover" />
             <div className="p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-2">Consultoria Personalizada</h3>
               <p className="text-gray-600">

@@ -1,6 +1,8 @@
+import React from 'react';
+
 interface FeatureItemProps {
-  icon: any;
-  label: any;
+  icon: React.ReactNode;
+  label: string;
 }
 
 export default function FeatureItem({ icon, label }: FeatureItemProps) {

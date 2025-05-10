@@ -1,15 +1,17 @@
 import { FaUser, FaPen, FaShoppingCart, FaSearch } from 'react-icons/fa';
+import Image from 'next/image';
 
 export default function Header() {
   return (
     <div className="bg-[#0073a8] px-4 py-3">
       <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto space-y-3 md:space-y-0">
-        
-        {/* Logo */}
+          {/* Logo */}
         <div className="ml-10">
-          <img
+          <Image
             src="/img/logo.jpg" // Replace with your actual logo path
             alt="Ótica Olhos do Bem"
+            width={80}
+            height={80}
             className="h-20 w-auto rounded-full"
           />
         </div>

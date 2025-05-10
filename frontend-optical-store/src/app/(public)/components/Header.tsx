@@ -1,9 +1,10 @@
+import Image from 'next/image';
+
 export default function Header() {
   return (
-<div className="bg-[#0d4a66] text-white flex items-center justify-between px-10 py-4 shadow-md fixed top-0 w-full z-50">
-  {/* LOGO */}
+<div className="bg-[#0d4a66] text-white flex items-center justify-between px-10 py-4 shadow-md fixed top-0 w-full z-50">  {/* LOGO */}
   <div className="flex items-center space-x-3">
-    <img src="/img/satikologo.png" alt="Óticas Satiko" className="h-20" />
+    <Image src="/img/satikologo.png" alt="Óticas Satiko" width={80} height={80} className="h-20 w-auto" />
   </div>
 
   {/* MENU */}

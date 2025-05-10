@@ -33,15 +33,18 @@
 //   );
 // }
 
+import Image from 'next/image';
+
 export default function AboutSection() {
   return (
-    <section id="sobre-nos" className="bg-white-100 py-16 px-6 lg:px-20">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10">
+    <section id="sobre-nos" className="bg-white-100 py-16 px-6 lg:px-20">      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10">
         {/* Imagem com selo */}
         <div className="relative w-full lg:w-1/2">
-          <img
+          <Image
             src="/img/modeloAbout.png"
             alt="Ótica Satiko"
+            width={800}
+            height={600}
             className="rounded-xl shadow-lg object-cover w-full h-full max-h-[400px]"
           />
           <div className="absolute bottom-4 left-4 bg-white text-sm text-gray-800 font-semibold px-4 py-2 rounded-lg shadow-md">

@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/datatypes"
+)
 
 type User struct {
 	ID           int64     `json:"id"`

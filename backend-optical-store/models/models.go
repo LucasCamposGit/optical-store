@@ -78,6 +78,15 @@ type CartItem struct {
 	UnitPrice        float64 `json:"unit_price"`
 }
 
+type Category struct {
+	ID          int64     `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	ParentID    *int64    `json:"parent_id,omitempty"` // nullable for root categories
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
 type Order struct {
 	ID             int64       `json:"id"`
 	UserID         int64       `json:"user_id"`

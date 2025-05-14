@@ -107,3 +107,13 @@ type OrderItem struct {
 	UnitPrice        float64        `json:"unit_price"`
 	LensOptionsJSON  datatypes.JSON `json:"lens_options"`
 }
+
+// RefreshToken represents a refresh token stored in the database
+type RefreshToken struct {
+	ID        int64     `json:"id"`
+	UserID    int64     `json:"user_id"`
+	Token     string    `json:"token"`
+	Expired   bool      `json:"expired" gorm:"default:false"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}

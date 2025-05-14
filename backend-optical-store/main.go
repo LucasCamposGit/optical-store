@@ -2,33 +2,32 @@ package main
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	"log"
-
-	"github.com/go-chi/chi/v5"
 	chimw "github.com/go-chi/chi/v5/middleware"
 	"github.com/joho/godotenv"
 
-	"github.com/LucasCamposGit/optical-store/backend-optical-store/db"
-	"github.com/LucasCamposGit/optical-store/backend-optical-store/handlers"
+	"backend-optical-store/db"
 )
 
 func main() {
-
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("Warning: Error loading .env file, using default environment variables")
 	}
+
+	// Connect to database
 	db.ConnectDB()
-	r := chi.NewRouter()
+	r := SetupRouter(db.DB)
 	r.Use(chimw.Logger)
 	r.Use(chimw.Recoverer)
 
+	// CORS middleware
 	r.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -41,10 +40,6 @@ func main() {
 			next.ServeHTTP(w, r)
 		})
 	})
-	r.Post("/api/register", handlers.Register)
-	r.Post("/api/login", handlers.Login)
-	r.Post("/api/refresh-token", handlers.RefreshToken)
-	r.Post("/api/google-login", handlers.GoogleLogin)
 
 	// Get port from environment variable or use default
 	port := os.Getenv("PORT")
@@ -66,9 +61,9 @@ func main() {
 	signal.Notify(sig, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	go func() {
 		<-sig
-
 		// Shutdown signal with 30 seconds timeout
-		shutdownCtx, _ := context.WithTimeout(serverCtx, 30*time.Second)
+		shutdownCtx, cancelCtx := context.WithTimeout(serverCtx, 30*time.Second)
+		defer cancelCtx() // Ensure the cancel function is called to avoid context leak
 
 		go func() {
 			<-shutdownCtx.Done()

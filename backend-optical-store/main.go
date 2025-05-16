@@ -9,24 +9,28 @@ import (
 	"syscall"
 	"time"
 
+	"backend-optical-store/db"
+	"backend-optical-store/router"
+
+	"github.com/go-chi/chi/v5"
 	chimw "github.com/go-chi/chi/v5/middleware"
 	"github.com/joho/godotenv"
-
-	"backend-optical-store/db"
 )
 
 func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("Warning: Error loading .env file, using default environment variables")
-	}
-
-	// Connect to database
+	}	// Connect to database
 	db.ConnectDB()
-	r := SetupRouter(db.DB)
+	
+	// Create a new router and apply middleware before adding routes
+	r := chi.NewRouter()
+	
+	// Apply middleware first
 	r.Use(chimw.Logger)
 	r.Use(chimw.Recoverer)
-
+	
 	// CORS middleware
 	r.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -40,6 +44,9 @@ func main() {
 			next.ServeHTTP(w, r)
 		})
 	})
+	
+	// Now mount all routes from router package
+	r.Mount("/", router.New(db.DB))
 
 	// Get port from environment variable or use default
 	port := os.Getenv("PORT")

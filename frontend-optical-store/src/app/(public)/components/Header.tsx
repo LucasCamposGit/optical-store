@@ -56,7 +56,7 @@ export default function Header() {
         <a href="#servicos" className="hover:text-blue-200 transition">Serviços</a>
         <a href="#parceiros" className="hover:text-blue-200 transition">Parceiros</a>
         <a href="#diferenciais" className="hover:text-blue-200 transition">Diferenciais</a>
-        <a href="#loja" className="hover:text-blue-200 transition">LOJA</a>
+        <a href="/loja" className="hover:text-blue-200 transition">LOJA</a>
         <a href="#contato" className="hover:text-blue-200 transition">Depoimentos</a>
       </nav>
 

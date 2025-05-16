@@ -21,16 +21,16 @@ func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("Warning: Error loading .env file, using default environment variables")
-	}	// Connect to database
+	} // Connect to database
 	db.ConnectDB()
-	
+
 	// Create a new router and apply middleware before adding routes
 	r := chi.NewRouter()
-	
+
 	// Apply middleware first
 	r.Use(chimw.Logger)
 	r.Use(chimw.Recoverer)
-	
+
 	// CORS middleware
 	r.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +44,7 @@ func main() {
 			next.ServeHTTP(w, r)
 		})
 	})
-	
+
 	// Now mount all routes from router package
 	r.Mount("/", router.New(db.DB))
 

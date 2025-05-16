@@ -1,15 +1,8 @@
-import Header from "./components/Header";
-import ContactBar from "./components/ContactBar";
-import Navbar from "./components/Navbar";
 import Image from 'next/image';
-import Footer from "./components/Footer";
 
 export default function Store() {
   return (
     <div>
-      <ContactBar />
-      <Header />
-      <Navbar />
       <section className="bg-blue-100 py-8">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-semibold mb-4">Armações a partir de R$ 89,00</h2>
@@ -48,9 +41,6 @@ export default function Store() {
           </div>
         </div>
       </section>
-      
-      <Footer />
-
     </div>
   );
 }

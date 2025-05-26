@@ -9,7 +9,7 @@ import StoreSection from "./components/StoreSection";
 import ContactSection from "./components/ContactSection";
 import WhatsAppButton from "./components/WhatsAppButton";
 // import WhatsappSection from "./components/WhatsAppButton";
-import FeaturesSection from "./components/FeaturesSection";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
@@ -24,7 +24,7 @@ export default function Home() {
       <StoreSection />
       <ContactSection />
       <WhatsAppButton />
-      <FeaturesSection />
+      <Footer />
     </div >
   );
 }

@@ -16,26 +16,26 @@ export default function ContactBar() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
         
         <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0">
-          <div className="flex items-center space-x-1">
+          {/* <div className="flex items-center space-x-1">
             <FaHome />
             <span>Início</span>
-          </div>
+          </div> */}
 
-          <div className="hidden md:block">|</div>
+          {/* <div className="hidden md:block">|</div> */}
 
           <div className="flex items-center space-x-1">
             <FaPhone />
-            <span>Telefone: (11) 3181-6030</span>
+            <span>Telefone: (11) 2956-9466</span>
           </div>
 
-          <div className="hidden md:block">|</div>
+          {/* <div className="hidden md:block">|</div> */}
 
-          <div className="flex items-center space-x-1">
+          {/* <div className="flex items-center space-x-1">
             <FaEnvelope />
             <span>
               Email: <a href="mailto:contato@olhosdobem.com.br" className="text-blue-600 hover:underline">contato@olhosdobem.com.br</a>
             </span>
-          </div>
+          </div> */}
 
           <div className="hidden md:block">|</div>
 
@@ -47,10 +47,8 @@ export default function ContactBar() {
 
         <div className="flex items-center space-x-3 justify-center md:justify-end text-lg">
           <a href="#" className="hover:text-blue-400"><FaFacebookF /></a>
-          <a href="#" className="hover:text-blue-400"><FaTwitter /></a>
+          <a href="#" className="hover:text-pink-500"><FaWhatsapp /></a>
           <a href="#" className="hover:text-pink-500"><FaInstagram /></a>
-          <a href="#" className="hover:text-blue-400"><FaLinkedinIn /></a>
-          <a href="#" className="hover:text-red-600"><FaYoutube /></a>
         </div>
       </div>
     </div>

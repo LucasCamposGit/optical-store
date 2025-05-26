@@ -56,9 +56,17 @@ export default function Header() {
         <a href="#servicos" className="hover:text-blue-200 transition">Serviços</a>
         <a href="#parceiros" className="hover:text-blue-200 transition">Parceiros</a>
         <a href="#diferenciais" className="hover:text-blue-200 transition">Diferenciais</a>
-        <a href="/loja" className="hover:text-blue-200 transition">LOJA</a>
+
+          {/* LOJA com cor gold mantendo o estilo */}
+        <a
+          href="/loja"
+          className="relative px-3 py-1 rounded-md bg-[#f5cc59] text-[#3b2f00] hover:bg-[#d4af37] hover:text-white transition"
+        >
+          LOJA
+        </a>
         <a href="#contato" className="hover:text-blue-200 transition">Depoimentos</a>
       </nav>
+
 
       {/* MENU MOBILE (overlay) */}
       <div className={`lg:hidden fixed inset-0 bg-[#0d4a66] transition-all duration-300 z-40 ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>

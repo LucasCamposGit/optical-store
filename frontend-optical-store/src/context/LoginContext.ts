@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useReducer, useContext, ReactNode } from "react";
-import { AuthState, AuthAction, AUTH_ACTION, Tokens } from "@/types/auth";
+import React, { createContext, useContext } from "react";
+import { AuthState, AuthAction} from "@/types/auth";
 
 const initialState: AuthState = {
   isAuthenticated: false,
@@ -11,23 +11,23 @@ const initialState: AuthState = {
 const AuthContext = createContext<AuthState>(initialState);
 const AuthDispatchContext = createContext<React.Dispatch<AuthAction>>(() => {});
 
-function authReducer(state: AuthState, action: AuthAction): AuthState {
-  switch (action.type) {
-    case AUTH_ACTION.LOGIN_SUCCESS:
-    case AUTH_ACTION.REFRESH_TOKEN_SUCCESS:
-      return {
-        isAuthenticated: true,
-        tokens: action.payload,
-      };
-    case AUTH_ACTION.LOGOUT:
-      return {
-        isAuthenticated: false,
-        tokens: null,
-      };
-    default:
-      return state;
-  }
-}
+// function authReducer(state: AuthState, action: AuthAction): AuthState {
+//   switch (action.type) {
+//     case AUTH_ACTION.LOGIN_SUCCESS:
+//     case AUTH_ACTION.REFRESH_TOKEN_SUCCESS:
+//       return {
+//         isAuthenticated: true,
+//         tokens: action.payload,
+//       };
+//     case AUTH_ACTION.LOGOUT:
+//       return {
+//         isAuthenticated: false,
+//         tokens: null,
+//       };
+//     default:
+//       return state;
+//   }
+// }
 
 // export const AuthProvider = ({ children }: { children: ReactNode }) => {
 //   const [state, dispatch] = useReducer(authReducer, initialState);

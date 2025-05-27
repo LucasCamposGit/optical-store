@@ -37,3 +37,18 @@ func GetProduct(db *gorm.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(product)
 	}
 }
+
+func GetProducts(db *gorm.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Query all products with their variants
+		var products []models.Product
+		if err := db.Preload("Variants").Find(&products).Error; err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		// Return the products as JSON
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(products)
+	}
+}

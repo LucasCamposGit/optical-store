@@ -17,6 +17,7 @@ func New(db *gorm.DB) chi.Router {
 	r.Post("/api/login", handlers.Login(db))
 	r.Post("/api/refresh-token", handlers.RefreshToken(db))
 	r.Get("/api/products/{id}", handlers.GetProduct(db))
+	r.Get("/api/products", handlers.GetProducts(db))
 
 	// Protected routes
 	r.Group(func(r chi.Router) {

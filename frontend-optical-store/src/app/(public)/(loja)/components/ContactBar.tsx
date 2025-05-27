@@ -1,13 +1,8 @@
 import {
   FaFacebookF,
-  FaTwitter,
   FaInstagram,
-  FaLinkedinIn,
-  FaYoutube,
   FaPhone,
-  FaEnvelope,
   FaWhatsapp,
-  FaHome
 } from 'react-icons/fa';
 
 export default function ContactBar() {

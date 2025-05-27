@@ -47,6 +47,7 @@ type Product struct {
 	Description string    `json:"description"`
 	BasePrice   float64   `json:"base_price"`
 	CategoryID  int64     `json:"category_id"`
+	Image  		string     `json:"image"`
 	Variants    []Variant `json:"variants" gorm:"foreignKey:ProductID"`
 }
 

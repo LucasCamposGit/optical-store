@@ -3,10 +3,16 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <div
-      className="relative bg-cover bg-center h-screen flex flex-col justify-center items-center text-white"
-      style={{ backgroundImage: "url('/img/bg-hero.png')" }}
-    >
+ <div
+  className="relative h-screen flex flex-col justify-center items-center text-white 
+             bg-no-repeat bg-cover bg-fixed"
+  style={{
+    backgroundImage: "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/bg-hero.png')",
+    backgroundPosition: "center 65%", // valor ajustado para descer a imagem
+  }}
+>
+
+
       <div className="text-center px-4">
         <h1 className="text-5xl md:text-6xl font-extrabold tracking-widest">
           ÓTICA SATIKO

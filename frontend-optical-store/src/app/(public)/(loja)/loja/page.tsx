@@ -56,14 +56,14 @@ type Product = {
   base_price: number;
   category_id: number;
   image: string;
-  variants: any[];
+  variants: string[];
 };
 
 export default function TesteAPI() {
   const [produtos, setProdutos] = useState<Product[]>([]);
   const [erro, setErro] = useState<string | null>(null);
 
-  let urlImage = "http://localhost:8080/api/uploads/"
+  const urlImage = "http://localhost:8080/api/uploads/";
 
   useEffect(() => {
     const fetchProdutos = async () => {

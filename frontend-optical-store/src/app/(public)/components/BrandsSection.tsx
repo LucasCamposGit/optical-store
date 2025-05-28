@@ -16,7 +16,7 @@ export default function PartnersSection() {
         </p>
 
         {/* Título principal estilo imagem, mas em azul */}
-        <h2 className="text-3xl font-bold text-blue-600 mt-2 mb-10">
+        <h2 className="text-3xl font-bold text-[#0d4a66] mt-2 mb-10">
           Marcas e Parceiros
         </h2>
 

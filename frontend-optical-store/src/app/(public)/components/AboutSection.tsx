@@ -29,7 +29,7 @@ export default function AboutSection() {
           </p>
 
           <Link  href="https://wa.me/5511945647329?text=Olá!%20Gostaria%20de%20saber%20mais">
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold transition cursor-pointer hover:bg-blue-700 active:scale-95 active:translate-y-[1px]">
+            <button className="bg-[#0d4a66] text-white px-6 py-2 rounded-lg font-semibold transition cursor-pointer hover:bg-[#0d4a99] active:scale-95 active:translate-y-[1px]">
               ENTRE EM CONTATO
             </button>
           </Link>
@@ -40,7 +40,7 @@ export default function AboutSection() {
      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
         <div>
           <div className="flex justify-center mb-4">
-            <Eye className="w-10 h-10 text-blue-600" />
+            <Eye className="w-10 h-10 text-[#0d4a66]" />
           </div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">Missão</h3>
           <p className="text-gray-600">
@@ -49,7 +49,7 @@ export default function AboutSection() {
         </div>
         <div>
           <div className="flex justify-center mb-4">
-            <Target className="w-10 h-10 text-blue-600" />
+            <Target className="w-10 h-10 text-[#0d4a66]" />
           </div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">Visão</h3>
           <p className="text-gray-600">
@@ -58,7 +58,7 @@ export default function AboutSection() {
         </div>
         <div>
           <div className="flex justify-center mb-4">
-            <HeartHandshake className="w-10 h-10 text-blue-600" />
+            <HeartHandshake className="w-10 h-10 text-[#0d4a66]" />
           </div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">Valores</h3>
           <p className="text-gray-600">

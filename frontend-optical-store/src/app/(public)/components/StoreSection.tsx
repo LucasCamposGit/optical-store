@@ -9,7 +9,7 @@ export default function LojaSection() {
           Nossa Loja
         </p>
         <h2 className="text-2xl md:text-3xl font-semibold text-black mt-2">
-            Seu novo óculos <span className="text-blue-600 font-bold">ideal</span> está aqui.
+            Seu novo óculos <span className="text-[#0d4a66] font-bold">ideal</span> está aqui.
         </h2>
 
 
@@ -17,7 +17,7 @@ export default function LojaSection() {
         {/* Botão para a loja */}
         <a
           href="/loja"
-          className="inline-block mt-2 text-blue-600 text-sm font-medium hover:underline transition"
+          className="inline-block mt-2 text-[#0d4a66] text-sm font-medium hover:underline transition"
         >
           Ir para a loja &rarr;
         </a>

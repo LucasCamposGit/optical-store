@@ -130,7 +130,7 @@ export default function ContatoSection() {
             />
             <button
                 type="submit"
-                className="md:col-span-2 bg-blue-600 text-white font-medium py-3 rounded-md hover:bg-blue-700 transition"
+                className="md:col-span-2 bg-[#0d4a66] text-white font-medium py-3 cursor-pointer rounded-md hover:bg-[#0d4a99] transition"
             >
                 Enviar
             </button>

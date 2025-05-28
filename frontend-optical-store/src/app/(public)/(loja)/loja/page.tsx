@@ -106,10 +106,10 @@ export default function TesteAPI() {
                 )}
                 <h2 className="text-xl font-semibold">{produto.name}</h2>
                 <p className="text-gray-600">{produto.description}</p>
-                <p className="mt-2 font-bold text-blue-600">
+                <p className="mt-2 font-bold text-[#0d4a66]">
                   R$ {produto.base_price.toFixed(2)}
                 </p>
-                <button className="mt-4 w-full bg-blue-600 text-white py-2 cursor-pointer rounded hover:bg-blue-700">Adicionar ao Carrinho</button>
+                <button className="mt-4 w-full bg-[#0d4a66] text-white py-2 cursor-pointer rounded hover:bg-[#0d4a99]">Adicionar ao Carrinho</button>
               </div>
             ))}
           </div>

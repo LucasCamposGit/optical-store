@@ -12,7 +12,7 @@ export default function DiferenciaisSection() {
 
         {/* Título principal */}
         <h2 className="text-3xl font-semibold mt-2 text-black">
-          Excelência que você vê e <span className="text-blue-600 font-bold">confia!</span>
+          Excelência que você vê e <span className="text-[#0d4a66] font-bold">confia!</span>
         </h2>
 
         {/* Cards de diferenciais */}
@@ -66,8 +66,8 @@ export default function DiferenciaisSection() {
         {/* Botão de contato */}
         <div className="mt-12">
           <a
-            href="#contato"
-            className="bg-blue-600 text-white font-medium px-6 py-3 rounded-full hover:bg-blue-700 transition"
+            href="https://wa.me/5511945647329?text=Olá!%20Gostaria%20de%20saber%20mais"
+            className="bg-[#0d4a66] text-white font-medium px-6 py-3 rounded-full hover:bg-[#0d4a99] transition"
           >
             ENTRE EM CONTATO
           </a>

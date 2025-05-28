@@ -6,7 +6,7 @@ export default function FeaturesSection() {
       <div className="max-w-7xl mx-auto text-center">
         <p className="text-sm uppercase tracking-widest text-gray-600 mb-2">Nossos Serviços</p>
         <h2 className="text-3xl font-bold text-gray-800 mb-10">
-          Cuidando da sua Visão com <span className="text-blue-600">Excelência e Dedicação!</span>
+          Cuidando da sua Visão com <span className="text-[#0d4a66]">Excelência e Dedicação!</span>
         </h2>
 
         {/* Cards */}
@@ -47,7 +47,7 @@ export default function FeaturesSection() {
 
         {/* Botão */}
         <div className="mt-10">
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold cursor-pointer hover:bg-blue-700 transition active:scale-95 active:translate-y-[1px]">
+          <button className="bg-[#0d4a66] text-white px-6 py-3 rounded-full font-semibold cursor-pointer hover:bg-[#0d4a99] transition active:scale-95 active:translate-y-[1px]">
             ENTRE EM CONTATO
           </button>
         </div>

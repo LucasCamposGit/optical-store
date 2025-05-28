@@ -8,7 +8,7 @@ export default function HeroSection() {
              bg-no-repeat bg-cover bg-fixed"
   style={{
     backgroundImage: "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/bg-hero.png')",
-    backgroundPosition: "center 65%", // valor ajustado para descer a imagem
+    backgroundPosition: "center 70%", // valor ajustado para descer a imagem
   }}
 >
 

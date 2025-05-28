@@ -42,7 +42,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 cursor-pointer rounded-md hover:bg-blue-700 font-semibold transition duration-200"
+            className="w-full bg-[#0d4a66] text-white py-2 cursor-pointer rounded-md hover:bg-[#0d4a99] font-semibold transition duration-200"
           >
             Entrar
           </button>
@@ -70,7 +70,7 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-gray-600">
           Ainda não tem uma conta?{" "}
-          <Link href="/cadastro" className="text-blue-600 hover:underline font-semibold">
+          <Link href="/cadastro" className="text-[#0d4a66] hover:underline font-semibold">
             Criar conta
           </Link>
         </p>

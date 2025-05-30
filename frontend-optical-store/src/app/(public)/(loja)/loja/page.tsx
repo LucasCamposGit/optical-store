@@ -48,6 +48,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from 'next/image';
 
 type Product = {
   id: number;
@@ -70,8 +71,7 @@ export default function TesteAPI() {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
         const data = await res.json();
-        setProdutos(data);
-      } catch (err) {
+        setProdutos(data);      } catch {
         setErro("Erro ao conectar com a API");
       }
     };
@@ -98,9 +98,11 @@ export default function TesteAPI() {
             {produtos.map((produto) => (
               <div key={produto.id} className="p-4 border rounded shadow">
                 {produto.image && (
-                  <img
+                  <Image
                     src={urlImage + produto.image}
                     alt={produto.name}
+                    width={400}
+                    height={300}
                     className="w-full h-40 object-cover mb-4 rounded"
                   />
                 )}

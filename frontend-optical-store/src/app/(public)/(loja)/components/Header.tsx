@@ -39,7 +39,7 @@ export default function Header() {
           <span className="hidden md:inline">|</span>
           <div className="flex items-center space-x-1 hover:underline cursor-pointer">
             <FaPen />
-            <span>Cadastro</span>
+            <span><a href="/cadastro">Cadastro</a></span>
           </div>
           <span className="hidden md:inline">|</span>
           <div className="flex items-center space-x-1 hover:underline cursor-pointer">

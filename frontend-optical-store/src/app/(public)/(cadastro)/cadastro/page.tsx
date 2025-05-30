@@ -20,7 +20,8 @@ export default function CadastroPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/register", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+      const response = await fetch(`${apiUrl}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

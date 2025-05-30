@@ -64,7 +64,9 @@ export default function TesteAPI() {
   const [produtos, setProdutos] = useState<Product[]>([]);
   const [erro, setErro] = useState<string | null>(null);
 
-  const urlImage = "http://localhost:8080/api/uploads/";
+  // Corrige urlImage para evitar localhost em produção
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+  const urlImage = apiUrl ? `${apiUrl}/api/uploads/` : "";
 
   useEffect(() => {
     const fetchProdutos = async () => {
@@ -104,6 +106,7 @@ export default function TesteAPI() {
                     width={400}
                     height={300}
                     className="w-full h-40 object-cover mb-4 rounded"
+                    unoptimized={apiUrl.startsWith("http://localhost")}
                   />
                 )}
                 <h2 className="text-xl font-semibold">{produto.name}</h2>

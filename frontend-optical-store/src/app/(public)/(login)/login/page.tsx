@@ -40,7 +40,10 @@ export default function LoginPage() {
       }
 
       const data = await response.json();
-      
+
+      // Salva o token no localStorage
+      localStorage.setItem("twd", data.token);
+
       // Atualiza o contexto de autenticação
       authDispatch({
         type: AUTH_ACTION.LOGIN_SUCCESS,

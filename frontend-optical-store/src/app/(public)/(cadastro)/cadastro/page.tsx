@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,6 +10,8 @@ export default function CadastroPage() {
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [erro, setErro] = useState("");
+  const router = useRouter();
+
 
   const handleCadastro = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +32,7 @@ export default function CadastroPage() {
         body: JSON.stringify({
           email,
           password: senha,
-          role: "user", // Valor fixo
+          role: "user", 
         }),
       });
 
@@ -40,8 +43,8 @@ export default function CadastroPage() {
       }
 
       const data = await response.json();
-      console.log("Usuário registrado com sucesso:", data);
-      // redirecionar ou salvar token se necessário
+      router.push("/login");
+
     } catch (err) {
       console.error(err);
       setErro("Erro de rede ou servidor");

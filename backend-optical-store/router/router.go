@@ -32,6 +32,9 @@ func New(db *gorm.DB) chi.Router {
 			r.Get("/profile", handlers.GetProfile(db))
 			r.Put("/profile", handlers.UpdateProfile(db))
 			r.Delete("/profile", handlers.DeleteProfile(db))
+
+			// Products management routes
+			r.Post("/products", handlers.CreateProduct(db))
 		}) 
 	})
 

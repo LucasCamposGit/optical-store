@@ -52,3 +52,35 @@ func GetProducts(db *gorm.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(products)
 	}
 }
+
+func CreateProduct(db *gorm.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Parse the request body
+		var product models.Product
+		if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
+			http.Error(w, "Invalid request body", http.StatusBadRequest)
+			return
+		}
+
+		// Basic validation
+		if product.Name == "" {
+			http.Error(w, "Name is required", http.StatusBadRequest)
+			return
+		}
+		if product.BasePrice <= 0 {
+			http.Error(w, "Base price must be greater than 0", http.StatusBadRequest)
+			return
+		}
+
+		// Create the product in the database
+		if err := db.Create(&product).Error; err != nil {
+			http.Error(w, "Failed to create product", http.StatusInternalServerError)
+			return
+		}
+
+		// Return the created product
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(product)
+	}
+}

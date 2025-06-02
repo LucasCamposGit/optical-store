@@ -36,7 +36,7 @@ export default function ContactBar() {
 
           <div className="flex items-center space-x-1">
             <FaWhatsapp />
-            <span>WhatsApp: (11) 99677-5541</span>
+            <span>WhatsApp: (11) 94564-7329</span>
           </div>
         </div>
 

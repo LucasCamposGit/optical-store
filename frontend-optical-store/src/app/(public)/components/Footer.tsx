@@ -37,16 +37,15 @@ export default function Footer() {
         <div>
           <h2 className="text-xl font-semibold mb-2">Contato</h2>
           <p className="text-sm">Email: satiko.oticas@gmail.com</p>
-          <p className="text-sm">Telefone: (11) 93215-3779</p>
+          <p className="text-sm">Celular: (11) 94564-7329</p>
+          <p className="text-sm">Telefone: (11) 2956-9466</p>
         </div>
 
         {/* Coluna 4 - Endereços */}
         <div>
           <h2 className="text-xl font-semibold mb-2">Endereços</h2>
           <ul className="text-sm space-y-1">
-            <li>Rua Naim Miguel, 29 – A – Centro, Jundiaí – SP</li>
-            <li>Av. Parada Pinto, 258 – Vila Nova Cachoeirinha, São Paulo – SP</li>
-            <li>Rua Ver. Ângelo Gianone, 41C – Centro, Mauá – SP</li>
+            <li>Av. Raimundo Paradera, 129 - Vila Rosaria, São Paulo - SP, 08021-450</li>
           </ul>
         </div>
 

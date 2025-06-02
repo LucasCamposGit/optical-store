@@ -70,16 +70,22 @@ export default function Header() {
 
       {/* MENU MOBILE (overlay) */}
       <div className={`lg:hidden fixed inset-0 bg-[#0d4a66] transition-all duration-300 z-40 ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div className="flex flex-col items-center justify-center h-full">
-          <nav className="flex flex-col items-center space-y-6 text-xl font-semibold">
-            <a href="#" onClick={handleLinkClick} className="relative text-white after:content-[''] after:absolute after:w-full after:h-[2px] after:bg-white after:left-0 after:-bottom-1">
+        <div className="flex flex-col items-center justify-center h-full space-y-8">
+          <nav className="flex flex-col items-center space-y-6 text-lg font-semibold text-white">
+            <a href="#" onClick={handleLinkClick} className="relative after:content-[''] after:absolute after:w-full after:h-[2px] after:bg-white after:left-0 after:-bottom-1">
               Home
             </a>
             <a href="#sobre-nos" onClick={handleLinkClick} className="hover:text-blue-200 transition">Sobre Nós</a>
             <a href="#servicos" onClick={handleLinkClick} className="hover:text-blue-200 transition">Serviços</a>
             <a href="#parceiros" onClick={handleLinkClick} className="hover:text-blue-200 transition">Parceiros</a>
             <a href="#diferenciais" onClick={handleLinkClick} className="hover:text-blue-200 transition">Diferenciais</a>
-            <a href="#loja" onClick={handleLinkClick} className="hover:text-blue-200 transition">LOJA</a>
+            <a
+              href="/loja"
+              onClick={handleLinkClick}
+              className="relative px-3 py-1 rounded-md bg-[#f5cc59] text-[#3b2f00] hover:bg-[#d4af37] hover:text-white transition"
+            >
+              LOJA
+            </a>
             <a href="#contato" onClick={handleLinkClick} className="hover:text-blue-200 transition">Depoimentos</a>
           </nav>
         </div>

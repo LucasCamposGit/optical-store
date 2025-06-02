@@ -1,7 +1,7 @@
 export default function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/5511942656386?text=Olá!%20Gostaria%20de%20saber%20mais"
+      href="https://wa.me/5511945647329?text=Olá!%20Gostaria%20de%20saber%20mais"
       className="fixed bottom-6 right-6 bg-green-500 rounded-full p-3 shadow-lg hover:bg-green-600 transition z-50"
       target="_blank"
       rel="noopener noreferrer"

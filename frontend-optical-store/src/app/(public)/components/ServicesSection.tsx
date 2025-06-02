@@ -47,9 +47,10 @@ export default function FeaturesSection() {
 
         {/* Botão */}
         <div className="mt-10">
-          <button className="bg-[#0d4a66] text-white px-6 py-3 rounded-full font-semibold cursor-pointer hover:bg-[#0d4a99] transition active:scale-95 active:translate-y-[1px]">
+          <a className="bg-[#0d4a66] text-white px-6 py-3 rounded-full font-semibold cursor-pointer hover:bg-[#0d4a99] transition active:scale-95 active:translate-y-[1px]"
+           href="https://wa.me/5511945647329?text=Olá!%20Gostaria%20de%20saber%20mais">
             ENTRE EM CONTATO
-          </button>
+          </a>
         </div>
       </div>
     </section>

@@ -5,7 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-import { useAuth, useAuthDispatch } from "@/context/LoginContext";
+import { useAuthDispatch } from "@/context/LoginContext";
 import { AUTH_ACTION } from "@/types/action";
 
 export default function LoginPage() {
@@ -51,7 +51,7 @@ export default function LoginPage() {
       });
 
       // Redireciona para a página principal
-      router.push("/");
+      router.push("/loja");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao fazer login");
     } finally {

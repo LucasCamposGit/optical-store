@@ -92,10 +92,10 @@ func Register(db *gorm.DB) http.HandlerFunc {
 		}
 
 		// Store refresh token in database
-		if err := storeRefreshToken(db, user.ID, tokens.RefreshToken); err != nil {
-			http.Error(w, "Failed to store refresh token", http.StatusInternalServerError)
-			return
-		}
+		// if err := storeRefreshToken(db, user.ID, tokens.RefreshToken); err != nil {
+		// 	http.Error(w, "Failed to store refresh token", http.StatusInternalServerError)
+		// 	return
+		// }
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(tokens)

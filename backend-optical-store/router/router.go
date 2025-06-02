@@ -21,8 +21,7 @@ func New(db *gorm.DB) chi.Router {
 	r.Post("/api/refresh-token", handlers.RefreshToken(db))
 	r.Get("/api/products/{id}", handlers.GetProduct(db))
 	r.Get("/api/products", handlers.GetProducts(db))
-	// r.Get("/api/uploads/{}", handlers.GetProducts(db))
-
+	
 	fileServer := http.FileServer(http.Dir("./uploads"))
 	r.Handle("/api/uploads/*", http.StripPrefix("/api/uploads/", fileServer))
 	// Protected routes
@@ -33,7 +32,7 @@ func New(db *gorm.DB) chi.Router {
 			r.Get("/profile", handlers.GetProfile(db))
 			r.Put("/profile", handlers.UpdateProfile(db))
 			r.Delete("/profile", handlers.DeleteProfile(db))
-		})
+		}) 
 	})
 
 	return r

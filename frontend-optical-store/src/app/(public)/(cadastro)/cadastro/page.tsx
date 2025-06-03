@@ -42,7 +42,7 @@ export default function CadastroPage() {
         return;
       }
 
-      const data = await response.json();
+      // const data = await response.json();
       router.push("/login");
 
     } catch (err) {

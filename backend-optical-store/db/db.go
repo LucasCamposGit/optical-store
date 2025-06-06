@@ -102,6 +102,7 @@ func createTables() {
 		&models.Order{},
 		&models.OrderItem{},
 		&models.Category{},
+		&models.RefreshToken{},
 	)
 
 	if err != nil {

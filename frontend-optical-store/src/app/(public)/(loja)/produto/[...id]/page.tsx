@@ -1,16 +1,50 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+
+// Types
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  base_price: number;
+  category_id: number;
+  image: string;
+  variants: Variant[];
+}
+
+interface Variant {
+  id: number;
+  product_id: number;
+  sku: string;
+  color: string;
+  size: string;
+  extra_price: number;
+  stock_qty: number;
+  image_url: string;
+}
 
 // Subcomponents
 
-const PriceInfo = () => (
-  <div>
-    <p className="text-green-600 text-3xl font-semibold">R$ 135,00</p>
-    <p className="text-sm text-gray-700">em até 10x de R$ 13,50 sem juros</p>
-    <p className="text-sm text-gray-700">ou <span className="text-green-600">R$ 135,00</span> via depósito bancário</p>
-  </div>
-);
+const PriceInfo = ({ basePrice }: { basePrice: number }) => {
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(price);
+  };
+
+  const installmentPrice = basePrice / 10;
+
+  return (
+    <div>
+      <p className="text-green-600 text-3xl font-semibold">{formatPrice(basePrice)}</p>
+      <p className="text-sm text-gray-700">em até 10x de {formatPrice(installmentPrice)} sem juros</p>
+      <p className="text-sm text-gray-700">ou <span className="text-green-600">{formatPrice(basePrice)}</span> via depósito bancário</p>
+    </div>
+  );
+};
 
 const QuantitySelector = () => {
   const [quantity, setQuantity] = useState(1);
@@ -32,19 +66,20 @@ const QuantitySelector = () => {
   );
 };
 
-const Installments = () => {
-  const values = [
-    "1x de R$ 135,00",
-    "2x de R$ 67,50",
-    "3x de R$ 45,00",
-    "4x de R$ 33,75",
-    "5x de R$ 27,00",
-    "6x de R$ 22,50",
-    "7x de R$ 19,29",
-    "8x de R$ 16,88",
-    "9x de R$ 15,00",
-    "10x de R$ 13,50"
-  ];
+const Installments = ({ basePrice }: { basePrice: number }) => {
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(price);
+  };
+
+  const values = [];
+  for (let i = 1; i <= 10; i++) {
+    const installmentValue = basePrice / i;
+    values.push(`${i}x de ${formatPrice(installmentValue)}`);
+  }
+
   return (
     <div className="grid grid-cols-5 gap-2 mt-4 text-sm text-green-600">
       {values.map((v, i) => (
@@ -56,18 +91,46 @@ const Installments = () => {
   );
 };
 
-const ProductOptions = () => {
-  const options = ["AMARELA", "VERMELHA", "WHITE"];
+const ProductOptions = ({ variants }: { variants: Variant[] }) => {
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
+
+  useEffect(() => {
+    if (variants.length > 0) {
+      setSelectedVariant(variants[0]);
+    }
+  }, [variants]);
+
+  if (!variants || variants.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="flex gap-2 my-4">
-      {options.map((opt) => (
-        <button
-          key={opt}
-          className="border rounded px-3 py-1 text-sm hover:bg-gray-100"
-        >
-          {opt}
-        </button>
-      ))}
+    <div className="my-4">
+      <h3 className="text-sm font-medium mb-2">Opções disponíveis:</h3>
+      <div className="flex gap-2 flex-wrap">
+        {variants.map((variant) => (
+          <button
+            key={variant.id}
+            onClick={() => setSelectedVariant(variant)}
+            className={`border rounded px-3 py-1 text-sm hover:bg-gray-100 ${
+              selectedVariant?.id === variant.id ? 'bg-green-100 border-green-500' : ''
+            }`}
+          >
+            {variant.color} {variant.size && `- ${variant.size}`}
+            {variant.extra_price > 0 && (
+              <span className="text-xs text-gray-600 block">
+                +{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(variant.extra_price)}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+      {selectedVariant && (
+        <div className="mt-2 text-sm text-gray-600">
+          <p>SKU: {selectedVariant.sku}</p>
+          <p>Estoque: {selectedVariant.stock_qty} unidades</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -86,16 +149,108 @@ const PurchaseButtons = () => (
 // Main Component
 
 const ContactLensProduct = () => {
+  const params = useParams();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Extract product ID from params (first element of the id array)
+  const productId = Array.isArray(params.id) ? params.id[0] : params.id;
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!productId) {
+        setError('ID do produto não fornecido');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:8080/api/products/${productId}`);
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Produto não encontrado');
+          }
+          throw new Error('Erro ao carregar produto');
+        }
+
+        const productData = await response.json();
+        setProduct(productData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Erro desconhecido');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  if (loading) {
+    return (
+      <div className="max-w-3xl mx-auto p-6 border rounded shadow-md">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded mb-4"></div>
+          <div className="h-12 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-3xl mx-auto p-6 border rounded shadow-md">
+        <div className="text-center text-red-600">
+          <h2 className="text-xl font-semibold mb-2">Erro</h2>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="max-w-3xl mx-auto p-6 border rounded shadow-md">
+        <div className="text-center text-gray-600">
+          <h2 className="text-xl font-semibold mb-2">Produto não encontrado</h2>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-3xl mx-auto p-6 border rounded shadow-md">
-      <h1 className="text-xl font-semibold mb-2">
-        Lentes de Contato Colorida Solflex Color Hype - Solótica
-      </h1>
-      <ProductOptions />
-      <PriceInfo />
-      <QuantitySelector />
-      <PurchaseButtons />
-      <Installments />
+    <div className="max-w-4xl mx-auto p-6">
+      {/* Product Image */}
+      {product.image && (
+        <div className="mb-6">
+          <img
+            src={`http://localhost:8080/api/uploads/${product.image}`}
+            alt={product.name}
+            className="w-full max-w-md mx-auto h-auto rounded-lg shadow-md"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+          />
+        </div>
+      )}
+
+      <div className="border rounded shadow-md p-6">
+        <h1 className="text-2xl font-semibold mb-2">{product.name}</h1>
+        
+        {product.description && (
+          <p className="text-gray-600 mb-4">{product.description}</p>
+        )}
+        
+        <ProductOptions variants={product.variants || []} />
+        <PriceInfo basePrice={product.base_price} />
+        <QuantitySelector />
+        <PurchaseButtons />
+        <Installments basePrice={product.base_price} />
+      </div>
     </div>
   );
 };

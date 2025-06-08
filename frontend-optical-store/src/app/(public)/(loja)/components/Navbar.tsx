@@ -22,17 +22,6 @@ export default function Navbar() {
             <span>ÓCULOS DE GRAU</span>
             <MdArrowDropDown />
           </li>
-
-          <li className="flex items-center space-x-1 hover:underline cursor-pointer">
-            {/* <GiContactLenses /> */}
-            <span>LENTES DE CONTATO</span>
-            <MdArrowDropDown />
-          </li>
-
-          <li className="hover:underline cursor-pointer">
-            <span>OUTLET</span>
-            <MdArrowDropDown className="inline" />
-          </li>
         </ul>
 
         {/* "Enviar Receita" button */}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -16,6 +17,13 @@ import (
 
 	"backend-optical-store/models"
 )
+
+// logProductsQuery logs the search/filter queries for monitoring
+func logProductsQuery(r *http.Request, total int64, duration time.Duration) {
+	params := r.URL.Query()
+	log.Printf("[PRODUCTS_API] Query: %v | Results: %d | Duration: %v | IP: %s",
+		params, total, duration, r.RemoteAddr)
+}
 
 // GetProduct returns a single product with its variants
 func GetProduct(db *gorm.DB) http.HandlerFunc {
@@ -44,18 +52,112 @@ func GetProduct(db *gorm.DB) http.HandlerFunc {
 	}
 }
 
+// ProductsResponse represents the paginated response for products
+type ProductsResponse struct {
+	Products   []models.Product `json:"products"`
+	Total      int64            `json:"total"`
+	Page       int              `json:"page"`
+	Limit      int              `json:"limit"`
+	TotalPages int              `json:"total_pages"`
+}
+
 func GetProducts(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Query all products with their variants
-		var products []models.Product
-		if err := db.Preload("Variants").Find(&products).Error; err != nil {
+		// Parse query parameters
+		search := r.URL.Query().Get("search")
+		categoryStr := r.URL.Query().Get("category")
+		priceMinStr := r.URL.Query().Get("price_min")
+		priceMaxStr := r.URL.Query().Get("price_max")
+		stockFilter := r.URL.Query().Get("stock")
+		pageStr := r.URL.Query().Get("page")
+		limitStr := r.URL.Query().Get("limit")
+
+		// Default pagination values
+		page := 1
+		limit := 10
+
+		// Parse and validate pagination parameters
+		if pageStr != "" {
+			if p, err := strconv.Atoi(pageStr); err == nil && p > 0 {
+				page = p
+			}
+		}
+		if limitStr != "" {
+			if l, err := strconv.Atoi(limitStr); err == nil && l > 0 && l <= 100 {
+				limit = l
+			}
+		}
+
+		// Build query
+		query := db.Model(&models.Product{}).Preload("Variants")
+
+		// Search filter (name or description)
+		if search != "" {
+			searchTerm := "%" + strings.ToLower(search) + "%"
+			query = query.Where("LOWER(name) LIKE ? OR LOWER(description) LIKE ?", searchTerm, searchTerm)
+		}
+
+		// Category filter
+		if categoryStr != "" {
+			if categoryID, err := strconv.ParseInt(categoryStr, 10, 64); err == nil {
+				query = query.Where("category_id = ?", categoryID)
+			}
+		}
+
+		// Price range filters
+		if priceMinStr != "" {
+			if priceMin, err := strconv.ParseFloat(priceMinStr, 64); err == nil && priceMin >= 0 {
+				query = query.Where("base_price >= ?", priceMin)
+			}
+		}
+		if priceMaxStr != "" {
+			if priceMax, err := strconv.ParseFloat(priceMaxStr, 64); err == nil && priceMax >= 0 {
+				query = query.Where("base_price <= ?", priceMax)
+			}
+		}
+
+		// Stock filter (products with available stock)
+		if stockFilter == "available" || stockFilter == "true" {
+			query = query.Joins("JOIN variants ON variants.product_id = products.id").
+				Where("variants.stock_qty > 0").
+				Group("products.id")
+		}
+
+		// Get total count for pagination
+		var total int64
+		if err := query.Count(&total).Error; err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 
+		// Calculate pagination
+		offset := (page - 1) * limit
+		totalPages := int((total + int64(limit) - 1) / int64(limit))
+
+		// Query products with pagination
+		var products []models.Product
+		if err := query.Offset(offset).Limit(limit).Find(&products).Error; err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		// Prepare response
+		response := ProductsResponse{
+			Products:   products,
+			Total:      total,
+			Page:       page,
+			Limit:      limit,
+			TotalPages: totalPages,
+		}
+
+		// Log the query for monitoring
+		defer func(start time.Time) {
+			logProductsQuery(r, total, time.Since(start))
+		}(time.Now())
+
 		// Return the products as JSON
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(products)
+		json.NewEncoder(w).Encode(response)
 	}
 }
 

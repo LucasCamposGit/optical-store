@@ -1,0 +1,59 @@
+### Product Search and Filter Tests
+
+# Basic API Tests
+GET http://localhost:8080/api/products
+Content-Type: application/json
+
+###
+
+# Search by name
+GET http://localhost:8080/api/products?search=óculos
+Content-Type: application/json
+
+###
+
+# Filter by category
+GET http://localhost:8080/api/products?category=1
+Content-Type: application/json
+
+###
+
+# Price range filter
+GET http://localhost:8080/api/products?price_min=50&price_max=200
+Content-Type: application/json
+
+###
+
+# Products with available stock
+GET http://localhost:8080/api/products?stock=available
+Content-Type: application/json
+
+###
+
+# Pagination test
+GET http://localhost:8080/api/products?page=1&limit=5
+Content-Type: application/json
+
+###
+
+# Combined filters test
+GET http://localhost:8080/api/products?search=lentes&category=1&price_min=100&price_max=300&stock=available&page=1&limit=10
+Content-Type: application/json
+
+###
+
+# Search with special characters
+GET http://localhost:8080/api/products?search=óculos%20de%20sol
+Content-Type: application/json
+
+###
+
+# Large limit test
+GET http://localhost:8080/api/products?limit=50
+Content-Type: application/json
+
+###
+
+# Invalid parameters test
+GET http://localhost:8080/api/products?page=-1&limit=0
+Content-Type: application/json

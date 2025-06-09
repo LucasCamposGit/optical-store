@@ -3,11 +3,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useDebounce } from '@/hooks/useDebounce';
 import FilterBar from '../components/FilterBar';
-import ProductCard from '../components/ProductCard';
-import LoadingCard from '../components/LoadingCard';
 
 // Types
 interface Product {
@@ -51,7 +49,6 @@ interface FilterState {
 }
 
 export default function Store() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   
   const [products, setProducts] = useState<Product[]>([]);
@@ -120,8 +117,7 @@ export default function Store() {
       style: 'currency',
       currency: 'BRL'
     }).format(price);
-  };
-  const fetchProducts = async (filtersToUse?: FilterState) => {
+  };  const fetchProducts = useCallback(async (filtersToUse?: FilterState) => {
     try {
       setLoading(true);
       
@@ -158,15 +154,14 @@ export default function Store() {
     } finally {
       setLoading(false);
     }
-  };
-  useEffect(() => {
+  }, [filters]);  useEffect(() => {
     // Fetch products when debounced search changes or other filters change
     const filtersWithDebouncedSearch = {
       ...filters,
       search: debouncedSearch
     };
     fetchProducts(filtersWithDebouncedSearch);
-  }, [debouncedSearch, filters.category, filters.price_min, filters.price_max, filters.stock, filters.page, filters.limit]);
+  }, [fetchProducts, debouncedSearch, filters]);
 
   const handleFilterChange = (key: keyof FilterState, value: string | boolean | number) => {
     const newFilters = {
@@ -179,12 +174,6 @@ export default function Store() {
     setFilters(newFilters);
     updateURL(newFilters);
   };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetchProducts();
-  };
-
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= pagination.total_pages) {
       handleFilterChange('page', newPage);    }
@@ -201,14 +190,7 @@ export default function Store() {
       limit: 12
     };
     setFilters(clearedFilters);
-    updateURL(clearedFilters);
-  };
-
-  const handleAddToCart = (product: Product) => {
-    // TODO: Implement add to cart functionality
-    console.log('Adding to cart:', product);
-    // This would typically dispatch to a cart context or state management
-  };
+    updateURL(clearedFilters);  };
 
   return (    <div>
       {/* Header Section */}
@@ -300,12 +282,13 @@ export default function Store() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {products.map((product) => (
                   <div key={product.id} className="border rounded-lg p-4 shadow hover:shadow-lg transition">
-                    {/* Product Image */}
-                    <div className="w-full h-48 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+                    {/* Product Image */}                    <div className="w-full h-48 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
                       {product.image ? (
-                        <img
+                        <Image
                           src={`http://localhost:8080/api/uploads/${product.image}`}
                           alt={product.name}
+                          width={300}
+                          height={200}
                           className="w-full h-full object-cover"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/img/oculos-card.png';

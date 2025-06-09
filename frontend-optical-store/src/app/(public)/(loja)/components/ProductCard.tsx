@@ -51,11 +51,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             Esgotado
           </div>
         )}
-        
-        {product.image ? (
-          <img
+          {product.image ? (
+          <Image
             src={`http://localhost:8080/api/uploads/${product.image}`}
             alt={product.name}
+            width={300}
+            height={200}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
             onError={(e) => {
               (e.target as HTMLImageElement).src = '/img/oculos-card.png';

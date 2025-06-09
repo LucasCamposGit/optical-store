@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 
 // Types
@@ -223,15 +224,15 @@ const ContactLensProduct = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {/* Product Image */}
+    <div className="max-w-4xl mx-auto p-6">      {/* Product Image */}
       {product.image && (
         <div className="mb-6">
-          <img
+          <Image
             src={`http://localhost:8080/api/uploads/${product.image}`}
             alt={product.name}
-            className="w-full max-w-md mx-auto h-auto rounded-lg shadow-md"
-            onError={(e) => {
+            width={500}
+            height={400}
+            className="w-full max-w-md mx-auto h-auto rounded-lg shadow-md"            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
               (e.target as HTMLImageElement).style.display = 'none';
             }}
           />

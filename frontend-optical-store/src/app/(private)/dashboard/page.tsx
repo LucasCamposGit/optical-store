@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 type Product = {
@@ -34,16 +34,10 @@ export default function DashboardPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
   const imageUrl = apiUrl ? `${apiUrl}/api/uploads/` : "";
-
-  // Fetch products on component mount
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
+  
+  const fetchProducts = useCallback(async () => {
     try {
       const response = await fetch(`${apiUrl}/api/products`);
       if (!response.ok) {
@@ -55,7 +49,12 @@ export default function DashboardPage() {
       setError("Erro ao carregar produtos");
       console.error(err);
     }
-  };
+  }, [apiUrl]);
+
+  // Fetch products on component mount
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const resetForm = () => {
     setFormData({
@@ -250,7 +249,7 @@ export default function DashboardPage() {
         {products.length === 0 && (
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <p className="text-gray-500 text-lg">Nenhum produto encontrado</p>
-            <p className="text-gray-400 text-sm mt-2">Clique em "Adicionar Produto" para começar</p>
+            <p className="text-gray-400 text-sm mt-2">Clique em &quot;Adicionar Produto&quot; para começar</p>
           </div>
         )}
       </div>

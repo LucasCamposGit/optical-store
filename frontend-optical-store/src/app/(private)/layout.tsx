@@ -33,8 +33,7 @@ export default function PrivateLayout({
           return;
         }
         
-        setIsAuthenticated(true);
-      } catch (error) {
+        setIsAuthenticated(true);      } catch {
         localStorage.removeItem("twd");
         router.push("/login");
         return;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -48,7 +48,20 @@ interface FilterState {
   limit: number;
 }
 
-export default function Store() {
+// Loading component for Suspense fallback
+function StoreLoading() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Carregando loja...</p>
+      </div>
+    </div>
+  );
+}
+
+// Main store component that uses useSearchParams
+function StoreContent() {
   const searchParams = useSearchParams();
   
   const [products, setProducts] = useState<Product[]>([]);
@@ -376,9 +389,17 @@ export default function Store() {
                   Próximo
                 </button>
               </div>
-            )}
-          </>
+            )}          </>
         )}
       </section>    </div>
+  );
+}
+
+// Main component wrapped with Suspense
+export default function Store() {
+  return (
+    <Suspense fallback={<StoreLoading />}>
+      <StoreContent />
+    </Suspense>
   );
 }

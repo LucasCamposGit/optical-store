@@ -47,7 +47,7 @@ type Product struct {
 	Description string    `json:"description"`
 	BasePrice   float64   `json:"base_price"`
 	CategoryID  int64     `json:"category_id"`
-	Image  		string     `json:"image"`
+	Image       string    `json:"image"`
 	Variants    []Variant `json:"variants" gorm:"foreignKey:ProductID"`
 }
 
@@ -60,6 +60,7 @@ type Variant struct {
 	ExtraPrice float64 `json:"extra_price"`
 	StockQty   int     `json:"stock_qty"`
 	ImageURL   string  `json:"image_url"`
+	Product    Product `json:"product" gorm:"foreignKey:ProductID;references:ID"`
 }
 
 type Cart struct {
@@ -72,11 +73,14 @@ type Cart struct {
 }
 
 type CartItem struct {
-	ID               int64   `json:"id"`
-	CartID           int64   `json:"cart_id"`
-	ProductVariantID int64   `json:"product_variant_id"`
-	Qty              int     `json:"qty"`
-	UnitPrice        float64 `json:"unit_price"`
+	ID               int64     `json:"id"`
+	CartID           int64     `json:"cart_id"`
+	ProductVariantID int64     `json:"product_variant_id"`
+	Qty              int       `json:"qty"`
+	UnitPrice        float64   `json:"unit_price"`
+	Variant          Variant   `json:"variant" gorm:"foreignKey:ProductVariantID;references:ID"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
 }
 
 type Category struct {

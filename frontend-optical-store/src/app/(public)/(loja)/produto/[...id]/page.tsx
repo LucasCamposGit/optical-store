@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 
 // Types
 interface Product {
@@ -47,22 +48,38 @@ const PriceInfo = ({ basePrice }: { basePrice: number }) => {
   );
 };
 
-const QuantitySelector = () => {
-  const [quantity, setQuantity] = useState(1);
+const QuantitySelector = ({ 
+  quantity, 
+  setQuantity, 
+  maxQuantity 
+}: { 
+  quantity: number; 
+  setQuantity: (q: number) => void; 
+  maxQuantity: number; 
+}) => {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 my-4">
       <label className="text-sm font-medium">Quantidade</label>
-      <select
-        value={quantity}
-        onChange={(e) => setQuantity(Number(e.target.value))}
-        className="border rounded px-2 py-1"
-      >
-        {[...Array(10)].map((_, i) => (
-          <option key={i + 1} value={i + 1}>
-            {i + 1}
-          </option>
-        ))}
-      </select>
+      <div className="flex items-center border rounded">
+        <button
+          onClick={() => setQuantity(Math.max(1, quantity - 1))}
+          className="px-3 py-1 hover:bg-gray-100"
+          disabled={quantity <= 1}
+        >
+          -
+        </button>
+        <span className="px-4 py-1">{quantity}</span>
+        <button
+          onClick={() => setQuantity(Math.min(maxQuantity, quantity + 1))}
+          className="px-3 py-1 hover:bg-gray-100"
+          disabled={quantity >= maxQuantity}
+        >
+          +
+        </button>
+      </div>
+      <span className="text-sm text-gray-500">
+        {maxQuantity > 0 ? `(${maxQuantity} disponível${maxQuantity > 1 ? 'eis' : ''})` : '(Fora de estoque)'}
+      </span>
     </div>
   );
 };
@@ -92,68 +109,108 @@ const Installments = ({ basePrice }: { basePrice: number }) => {
   );
 };
 
-const ProductOptions = ({ variants }: { variants: Variant[] }) => {
-  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
-
-  useEffect(() => {
-    if (variants.length > 0) {
-      setSelectedVariant(variants[0]);
-    }
-  }, [variants]);
-
+const ProductOptions = ({ 
+  variants, 
+  selectedVariant, 
+  onVariantChange 
+}: { 
+  variants: Variant[]; 
+  selectedVariant: Variant | null;
+  onVariantChange: (variant: Variant) => void;
+}) => {
   if (!variants || variants.length === 0) {
-    return null;
+    return (
+      <div className="my-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
+        <p className="text-yellow-800">Este produto não possui variantes disponíveis.</p>
+      </div>
+    );
   }
 
   return (
     <div className="my-4">
-      <h3 className="text-sm font-medium mb-2">Opções disponíveis:</h3>
-      <div className="flex gap-2 flex-wrap">
+      <h3 className="text-lg font-semibold mb-2">Opções Disponíveis</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
         {variants.map((variant) => (
-          <button
+          <div
             key={variant.id}
-            onClick={() => setSelectedVariant(variant)}
-            className={`border rounded px-3 py-1 text-sm hover:bg-gray-100 ${
-              selectedVariant?.id === variant.id ? 'bg-green-100 border-green-500' : ''
+            onClick={() => onVariantChange(variant)}
+            className={`cursor-pointer border rounded p-3 transition ${
+              selectedVariant?.id === variant.id
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 hover:border-gray-300'
             }`}
           >
-            {variant.color} {variant.size && `- ${variant.size}`}
-            {variant.extra_price > 0 && (
-              <span className="text-xs text-gray-600 block">
-                +{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(variant.extra_price)}
-              </span>
-            )}
-          </button>
+            <div className="text-sm font-medium">{variant.sku}</div>
+            <div className="text-sm text-gray-600">
+              Cor: {variant.color} | Tamanho: {variant.size}
+            </div>
+            <div className="text-sm">
+              {variant.extra_price > 0 && (
+                <span className="text-green-600">+R$ {variant.extra_price.toFixed(2)}</span>
+              )}
+            </div>
+            <div className="text-xs text-gray-500">
+              {variant.stock_qty > 0 
+                ? `${variant.stock_qty} em estoque`
+                : 'Fora de estoque'
+              }
+            </div>
+          </div>
         ))}
       </div>
-      {selectedVariant && (
-        <div className="mt-2 text-sm text-gray-600">
-          <p>SKU: {selectedVariant.sku}</p>
-          <p>Estoque: {selectedVariant.stock_qty} unidades</p>
-        </div>
-      )}
     </div>
   );
 };
 
-const PurchaseButtons = () => (
-  <div className="flex gap-4 my-4">
-    <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-      COMPRAR
-    </button>
-    <button className="border border-green-600 text-green-600 px-4 py-2 rounded hover:bg-green-50">
-      COMPRA EM QUANTIDADE
-    </button>
-  </div>
-);
+const PurchaseButtons = ({ 
+  onAddToCart, 
+  selectedVariant, 
+  quantity,
+  addingToCart 
+}: { 
+  onAddToCart: () => void;
+  selectedVariant: Variant | null;
+  quantity: number;
+  addingToCart: boolean;
+}) => {
+  const canAddToCart = selectedVariant && selectedVariant.stock_qty >= quantity && quantity > 0;
+
+  return (
+    <div className="flex gap-4 my-4">
+      <button 
+        onClick={onAddToCart}
+        disabled={!canAddToCart || addingToCart}
+        className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+      >
+        {addingToCart ? (
+          <>
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+            Adicionando...
+          </>
+        ) : (
+          'ADICIONAR AO CARRINHO'
+        )}
+      </button>
+      <button className="border border-green-600 text-green-600 px-4 py-2 rounded hover:bg-green-50">
+        COMPRA EM QUANTIDADE
+      </button>
+    </div>
+  );
+};
 
 // Main Component
 
 const ContactLensProduct = () => {
   const params = useParams();
+  const router = useRouter();
+  const { addToCart } = useCart();
+  
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
+  const [quantity, setQuantity] = useState(1);
+  const [addingToCart, setAddingToCart] = useState(false);
 
   // Extract product ID from params (first element of the id array)
   const productId = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -175,19 +232,54 @@ const ContactLensProduct = () => {
             throw new Error('Produto não encontrado');
           }
           throw new Error('Erro ao carregar produto');
-        }
-
-        const productData = await response.json();
+        }        const productData = await response.json();
         setProduct(productData);
+        
+        // Set the first variant as selected by default
+        if (productData.variants && productData.variants.length > 0) {
+          setSelectedVariant(productData.variants[0]);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Erro desconhecido');
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchProduct();
+    };    fetchProduct();
   }, [productId]);
+
+  // Handle add to cart
+  const handleAddToCart = async () => {
+    if (!selectedVariant) {
+      alert('Por favor, selecione uma variante do produto.');
+      return;
+    }
+
+    // Check if user is authenticated
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    if (!token) {
+      router.push('/login?redirect=' + encodeURIComponent(`/produto/${productId}`));
+      return;
+    }
+
+    try {
+      setAddingToCart(true);
+      await addToCart(selectedVariant.id, quantity);
+      alert('Produto adicionado ao carrinho com sucesso!');
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Erro ao adicionar produto ao carrinho. Tente novamente.');
+    } finally {
+      setAddingToCart(false);
+    }
+  };
+
+  const handleVariantChange = (variant: Variant) => {
+    setSelectedVariant(variant);
+    // Reset quantity if it exceeds the new variant's stock
+    if (quantity > variant.stock_qty) {
+      setQuantity(Math.min(variant.stock_qty, 1));
+    }
+  };
 
   if (loading) {
     return (
@@ -245,12 +337,24 @@ const ContactLensProduct = () => {
         {product.description && (
           <p className="text-gray-600 mb-4">{product.description}</p>
         )}
-        
-        <ProductOptions variants={product.variants || []} />
-        <PriceInfo basePrice={product.base_price} />
-        <QuantitySelector />
-        <PurchaseButtons />
-        <Installments basePrice={product.base_price} />
+          <ProductOptions 
+          variants={product.variants || []} 
+          selectedVariant={selectedVariant}
+          onVariantChange={handleVariantChange}
+        />
+        <PriceInfo basePrice={product.base_price + (selectedVariant?.extra_price || 0)} />
+        <QuantitySelector 
+          quantity={quantity}
+          setQuantity={setQuantity}
+          maxQuantity={selectedVariant?.stock_qty || 0}
+        />
+        <PurchaseButtons 
+          onAddToCart={handleAddToCart}
+          selectedVariant={selectedVariant}
+          quantity={quantity}
+          addingToCart={addingToCart}
+        />
+        <Installments basePrice={product.base_price + (selectedVariant?.extra_price || 0)} />
       </div>
     </div>
   );

@@ -33,11 +33,13 @@ func ConnectDB() {
 	if err != nil {
 		log.Fatal("DB connection error:", err)
 	}
-
 	log.Println("Database connection established successfully")
 
 	// Create tables
 	createTables()
+
+	// Create performance indexes
+	CreateCartIndexes()
 }
 
 // createDatabaseIfNotExists creates the database if it doesn't exist

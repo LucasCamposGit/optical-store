@@ -3,8 +3,9 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useCart } from '@/context/CartContext';
 import FilterBar from '../components/FilterBar';
 
 // Types
@@ -63,10 +64,14 @@ function StoreLoading() {
 // Main store component that uses useSearchParams
 function StoreContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { addToCart } = useCart();
   
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [addingToCart, setAddingToCart] = useState<number | null>(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState<number | null>(null);
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
@@ -191,7 +196,6 @@ function StoreContent() {
     if (newPage >= 1 && newPage <= pagination.total_pages) {
       handleFilterChange('page', newPage);    }
   };
-
   const handleClearFilters = () => {
     const clearedFilters = {
       search: '',
@@ -204,6 +208,38 @@ function StoreContent() {
     };
     setFilters(clearedFilters);
     updateURL(clearedFilters);  };
+
+  // Handle add to cart functionality
+  const handleAddToCart = async (product: Product) => {
+    // Check if user is authenticated
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    if (!token) {
+      router.push('/login?redirect=/loja');
+      return;
+    }
+    
+    // If product has no variants or only one variant, add directly
+    const variantToAdd = product.variants && product.variants.length > 0 ? product.variants[0] : null;
+    
+    if (!variantToAdd) {
+      alert('Este produto não possui variantes disponíveis.');
+      return;
+    }
+
+    try {
+      setAddingToCart(product.id);
+      await addToCart(variantToAdd.id, 1);
+      
+      // Show success message
+      setShowSuccessMessage(product.id);
+      setTimeout(() => setShowSuccessMessage(null), 3000);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Erro ao adicionar produto ao carrinho. Tente novamente.');
+    } finally {
+      setAddingToCart(null);
+    }
+  };
 
   return (    <div>
       {/* Header Section */}
@@ -330,18 +366,39 @@ function StoreContent() {
                           {product.variants.length} variante{product.variants.length > 1 ? 's' : ''} disponível{product.variants.length > 1 ? 'eis' : ''}
                         </p>
                       )}
-                    </div>
-
-                    {/* Actions */}
+                    </div>                    {/* Actions */}
                     <div className="space-y-2">
                       <Link href={`/produto/${product.id}`}>
                         <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
                           Ver Detalhes
                         </button>
                       </Link>
-                      <button className="w-full border border-blue-600 text-blue-600 py-2 rounded hover:bg-blue-50 transition">
-                        Adicionar ao Carrinho
-                      </button>
+                      <div className="relative">
+                        <button 
+                          onClick={() => handleAddToCart(product)}
+                          disabled={addingToCart === product.id || !product.variants || product.variants.length === 0}
+                          className="w-full border border-blue-600 text-blue-600 py-2 rounded hover:bg-blue-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {addingToCart === product.id ? (
+                            <div className="flex items-center justify-center">
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                              Adicionando...
+                            </div>
+                          ) : showSuccessMessage === product.id ? (
+                            <div className="flex items-center justify-center text-green-600">
+                              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                              Adicionado!
+                            </div>
+                          ) : (
+                            'Adicionar ao Carrinho'
+                          )}
+                        </button>
+                        {!product.variants || product.variants.length === 0 && (
+                          <p className="text-xs text-red-500 mt-1">Produto sem variantes disponíveis</p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}

@@ -22,8 +22,7 @@ func New(db *gorm.DB) chi.Router {
 	r.Get("/api/products", handlers.GetProducts(db))
 
 	fileServer := http.FileServer(http.Dir("./uploads"))
-	r.Handle("/api/uploads/*", http.StripPrefix("/api/uploads/", fileServer))
-	// Protected routes
+	r.Handle("/api/uploads/*", http.StripPrefix("/api/uploads/", fileServer)) // Protected routes
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.AuthMiddleware)
 		r.Route("/api", func(r chi.Router) {
@@ -35,6 +34,15 @@ func New(db *gorm.DB) chi.Router {
 			r.Post("/products", handlers.CreateProduct(db))
 			r.Put("/products/{id}", handlers.UpdateProduct(db))
 			r.Delete("/products/{id}", handlers.DeleteProduct(db))
+
+			// Cart routes
+			r.Route("/cart", func(r chi.Router) {
+				r.Get("/", handlers.GetCart(db))
+				r.Post("/add", handlers.AddToCart(db))
+				r.Put("/items/{id}", handlers.UpdateCartItem(db))
+				r.Delete("/items/{id}", handlers.RemoveFromCart(db))
+				r.Delete("/clear", handlers.ClearCart(db))
+			})
 		})
 	})
 

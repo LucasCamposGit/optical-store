@@ -2,8 +2,6 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/datatypes"
 )
 
 type User struct {
@@ -105,12 +103,12 @@ type Order struct {
 }
 
 type OrderItem struct {
-	ID               int64          `json:"id"`
-	OrderID          int64          `json:"order_id"`
-	ProductVariantID int64          `json:"product_variant_id"`
-	Qty              int            `json:"qty"`
-	UnitPrice        float64        `json:"unit_price"`
-	LensOptionsJSON  datatypes.JSON `json:"lens_options"`
+	ID               int64   `json:"id"`
+	OrderID          int64   `json:"order_id"`
+	ProductVariantID int64   `json:"product_variant_id"`
+	Qty              int     `json:"qty"`
+	UnitPrice        float64 `json:"unit_price"`
+	LensOptionsJSON  string  `json:"lens_options"`
 }
 
 // RefreshToken represents a refresh token stored in the database

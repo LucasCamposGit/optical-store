@@ -42,14 +42,16 @@ export default function LoginPage() {
       const data = await response.json();
 
       // Salva o token no localStorage
-      localStorage.setItem("twd", data.token);
+      localStorage.setItem("access_token", data.token);
+      localStorage.setItem("refresh_token", data.refresh_token);
 
       // Atualiza o contexto de autenticação
       authDispatch({
         type: AUTH_ACTION.LOGIN_SUCCESS,
         payload: {
-          accessToken: data.token,
-          refreshToken: data.refreshToken,
+          access_token: data.token,
+          refresh_token: data.refresh_token,
+          expires_in: 0,
         },
       });
 

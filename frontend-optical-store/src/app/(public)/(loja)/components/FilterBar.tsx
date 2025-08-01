@@ -60,7 +60,6 @@ const FilterBar: React.FC<FilterBarProps> = ({
             <option value="">Todas</option>
             <option value="1">Óculos de Grau</option>
             <option value="2">Óculos de Sol</option>
-            <option value="3">Lentes de Contato</option>
             <option value="4">Acessórios</option>
           </select>
         </div>

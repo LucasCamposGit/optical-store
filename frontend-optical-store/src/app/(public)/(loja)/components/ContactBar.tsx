@@ -41,8 +41,7 @@ export default function ContactBar() {
         </div>
 
         <div className="flex items-center space-x-3 justify-center md:justify-end text-lg">
-          <a href="#" className="hover:text-blue-400"><FaFacebookF /></a>
-          <a href="#" className="hover:text-pink-500"><FaWhatsapp /></a>
+          <a target="_blank" href="https://wa.me/5511945647329?text=Olá!%20Gostaria%20de%20saber%20mais" className="hover:text-pink-500"><FaWhatsapp /></a>
           <a href="#" className="hover:text-pink-500"><FaInstagram /></a>
         </div>
       </div>

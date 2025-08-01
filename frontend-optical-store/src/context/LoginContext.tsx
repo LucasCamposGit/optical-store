@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkAuthState = () => {
       if (typeof window !== 'undefined') {
-        const accessToken = localStorage.getItem('access_token');
+        const accessToken = localStorage.getItem('twd');
         const refreshToken = localStorage.getItem('refresh_token');
         
         if (accessToken && refreshToken) {
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Listen for storage changes (login/logout in other tabs)
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'access_token') {
+      if (e.key === 'twd') {
         if (e.newValue) {
           // Token was added - user logged in
           const refreshToken = localStorage.getItem('refresh_token');

@@ -72,10 +72,34 @@ export default function PrivateLayout({
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => {
-                  localStorage.removeItem("twd");
-                  router.push("/login");
+                  router.push("/dashboard");
                 }}
-                className="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"
+                className="text-gray-600 cursor-pointer hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Produtos
+              </button>
+              <button
+                onClick={() => {
+                  router.push("/dashboard/receitas");
+                }}
+                className="text-gray-600 cursor-pointer hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Receitas
+              </button>
+              <button
+                onClick={() => {
+                  router.push("/dashboard/suporte");
+                }}
+                className="text-gray-600 cursor-pointer hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Suporte
+              </button>
+              <button
+                onClick={() => {
+                  localStorage.removeItem("twd");
+                  router.push("/loja");
+                }}
+                className="text-gray-600 cursor-pointer hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Sair
               </button>

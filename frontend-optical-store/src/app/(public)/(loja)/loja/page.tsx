@@ -15,6 +15,7 @@ interface Product {
   description: string;
   base_price: number;
   category_id: number;
+  stock_qty: number;
   image: string;
   variants: Variant[];
 }
@@ -330,15 +331,16 @@ function StoreContent() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {products.map((product) => (
-                  <div key={product.id} className="border rounded-lg p-4 shadow hover:shadow-lg transition">
-                    {/* Product Image */}                    <div className="w-full h-48 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+                  <div key={product.id} className="bg-gray-50 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 overflow-hidden">
+                    {/* Product Image */}
+                    <div className="w-full h-56 bg-white flex items-center justify-center overflow-hidden">
                       {product.image ? (
                         <Image
                           src={`http://localhost:8080/api/uploads/${product.image}`}
                           alt={product.name}
                           width={300}
-                          height={200}
-                          className="w-full h-full object-cover"
+                          height={224}
+                          className="w-full h-full object-contain p-4"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/img/oculos-card.png';
                           }}
@@ -349,55 +351,42 @@ function StoreContent() {
                           alt={product.name} 
                           width={200} 
                           height={200} 
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain p-4"
                         />
                       )}
-                    </div>                    {/* Product Info */}
-                    <h3 className="text-lg font-medium mb-2 h-12 overflow-hidden">{product.name}</h3>
-                    {product.description && (
-                      <p className="text-sm text-gray-600 mb-2 h-10 overflow-hidden">{product.description}</p>
-                    )}
-                    
-                    {/* Price and Variants */}
-                    <div className="mb-4">
-                      <p className="text-blue-600 font-bold text-lg">{formatPrice(product.base_price)}</p>
-                      {product.variants && product.variants.length > 0 && (
-                        <p className="text-xs text-gray-500">
-                          {product.variants.length} variante{product.variants.length > 1 ? 's' : ''} disponível{product.variants.length > 1 ? 'eis' : ''}
+                    </div>
+
+                    {/* Product Info */}
+                    <div className="p-4">
+                      <h3 className="text-base font-medium text-gray-800 mb-2 h-12 overflow-hidden line-clamp-2">
+                        {product.name}
+                      </h3>
+                      
+                      {/* Price */}
+                      <div className="mb-4">
+                        <p className="text-blue-600 font-bold text-xl">{formatPrice(product.base_price)}</p>
+                        <p className="text-sm text-gray-500">
+                          em até 6x de {formatPrice(product.base_price / 6)} sem juros
                         </p>
-                      )}
-                    </div>                    {/* Actions */}
-                    <div className="space-y-2">
-                      <Link href={`/produto/${product.id}`}>
-                        <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-                          Ver Detalhes
-                        </button>
-                      </Link>
-                      <div className="relative">
-                        <button 
-                          onClick={() => handleAddToCart(product)}
-                          disabled={addingToCart === product.id || !product.variants || product.variants.length === 0}
-                          className="w-full border border-blue-600 text-blue-600 py-2 rounded hover:bg-blue-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {addingToCart === product.id ? (
-                            <div className="flex items-center justify-center">
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                              Adicionando...
-                            </div>
-                          ) : showSuccessMessage === product.id ? (
-                            <div className="flex items-center justify-center text-green-600">
-                              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                              Adicionado!
-                            </div>
-                          ) : (
-                            'Adicionar ao Carrinho'
-                          )}
-                        </button>
-                        {!product.variants || product.variants.length === 0 && (
-                          <p className="text-xs text-red-500 mt-1">Produto sem variantes disponíveis</p>
-                        )}
+                        <p className="text-sm text-gray-500">
+                          ou <span className="text-blue-600 font-medium">{formatPrice(product.base_price)} à vista</span>
+                        </p>
+                      </div>
+
+                      {/* Stock Status */}
+                      <div className="mb-4">
+                        <p className={`text-xs font-medium ${product.stock_qty > 0 ? 'text-green-600' : 'text-red-500'}`}>
+                          {product.stock_qty > 0 ? '✓ Disponível' : '✗ Indisponível'}
+                        </p>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="space-y-2">
+                        <Link href={`/produto/${product.id}`}>
+                          <button className="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 cursor-pointer transition-colors duration-200 font-medium">
+                            Ver Detalhes
+                          </button>
+                        </Link>
                       </div>
                     </div>
                   </div>

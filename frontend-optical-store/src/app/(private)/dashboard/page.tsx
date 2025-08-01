@@ -10,6 +10,7 @@ type Product = {
   base_price: number;
   category_id: number;
   image: string;
+  stock_qty: number;
 };
 
 type ProductFormData = {
@@ -17,6 +18,7 @@ type ProductFormData = {
   description: string;
   base_price: string;
   category_id: string;
+  stock_qty: string;
   image: File | null;
 };
 
@@ -29,6 +31,7 @@ export default function DashboardPage() {
     description: "",
     base_price: "",
     category_id: "",
+    stock_qty: "",
     image: null,
   });
   const [error, setError] = useState("");
@@ -44,10 +47,15 @@ export default function DashboardPage() {
         throw new Error("Erro ao buscar produtos");
       }
       const data = await response.json();
-      setProducts(data || []);
+      // O backend retorna um objeto com a propriedade 'products'
+      const productsArray = data.products || data;
+      // Garantir que seja sempre um array
+      setProducts(Array.isArray(productsArray) ? productsArray : []);
     } catch (err) {
       setError("Erro ao carregar produtos");
       console.error(err);
+      // Em caso de erro, garantir que products seja um array vazio
+      setProducts([]);
     }
   }, [apiUrl]);
 
@@ -62,6 +70,7 @@ export default function DashboardPage() {
       description: "",
       base_price: "",
       category_id: "",
+      stock_qty: "",
       image: null,
     });
     setEditingProduct(null);
@@ -77,6 +86,7 @@ export default function DashboardPage() {
         description: product.description,
         base_price: product.base_price.toString(),
         category_id: product.category_id.toString(),
+        stock_qty: product.stock_qty.toString(),
         image: null,
       });
     } else {
@@ -107,6 +117,7 @@ export default function DashboardPage() {
       formDataToSend.append("description", formData.description);
       formDataToSend.append("base_price", formData.base_price);
       formDataToSend.append("category_id", formData.category_id);
+      formDataToSend.append("stock_qty", formData.stock_qty);
       
       if (formData.image) {
         formDataToSend.append("image", formData.image);
@@ -187,7 +198,7 @@ export default function DashboardPage() {
             </div>
             <button
               onClick={() => openModal()}
-              className="bg-[#0d4a66] text-white px-6 py-3 rounded-lg hover:bg-[#0d4a99] font-semibold transition duration-200"
+              className="bg-[#0d4a66] cursor-pointer text-white px-6 py-3 rounded-lg hover:bg-[#0d4a99] font-semibold transition duration-200"
             >
               Adicionar Produto
             </button>
@@ -208,7 +219,7 @@ export default function DashboardPage() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
+          {Array.isArray(products) && products.map((product) => (
             <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
               {product.image && (
                 <div className="relative h-48 w-full">
@@ -224,19 +235,24 @@ export default function DashboardPage() {
               <div className="p-4">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">{product.name}</h3>
                 <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
-                <p className="text-2xl font-bold text-[#0d4a66] mb-4">
+                <p className="text-2xl font-bold text-[#0d4a66] mb-2">
                   R$ {product.base_price.toFixed(2)}
+                </p>
+                <p className="text-sm text-gray-600 mb-4">
+                  Estoque: <span className={`font-semibold ${product.stock_qty > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {product.stock_qty} unidades
+                  </span>
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => openModal(product)}
-                    className="flex-1 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
+                    className="flex-1 cursor-pointer bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => handleDelete(product.id)}
-                    className="flex-1 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200"
+                    className="flex-1 cursor-pointer bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200"
                   >
                     Excluir
                   </button>
@@ -246,7 +262,7 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {products.length === 0 && (
+        {(!Array.isArray(products) || products.length === 0) && (
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <p className="text-gray-500 text-lg">Nenhum produto encontrado</p>
             <p className="text-gray-400 text-sm mt-2">Clique em &quot;Adicionar Produto&quot; para começar</p>
@@ -265,7 +281,7 @@ export default function DashboardPage() {
                 </h2>
                 <button
                   onClick={closeModal}
-                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                  className="text-gray-500 cursor-pointer hover:text-gray-700 text-2xl"
                 >
                   ×
                 </button>
@@ -300,7 +316,7 @@ export default function DashboardPage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label htmlFor="basePrice" className="block text-sm font-medium text-gray-700 mb-1">
                       Preço Base *
@@ -318,18 +334,36 @@ export default function DashboardPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
-                      ID da Categoria *
+                    <label htmlFor="stockQuantity" className="block text-sm font-medium text-gray-700 mb-1">
+                      Quantidade em Estoque *
                     </label>
                     <input
                       type="number"
+                      id="stockQuantity"
+                      min="0"
+                      className="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 border-gray-300"
+                      value={formData.stock_qty}
+                      onChange={(e) => setFormData({ ...formData, stock_qty: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+                      Categoria *
+                    </label>
+                    <select
                       id="categoryId"
-                      min="1"
                       className="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 border-gray-300"
                       value={formData.category_id}
                       onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
                       required
-                    />
+                    >
+                      <option value="">Selecione uma categoria</option>
+                      <option value="1">Óculos de Grau</option>
+                      <option value="2">Óculos de Sol</option>
+                      <option value="4">Acessórios</option>
+                    </select>
                   </div>
                 </div>
 
@@ -368,14 +402,14 @@ export default function DashboardPage() {
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="flex-1 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition duration-200"
+                    className="flex-1 cursor-pointer bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition duration-200"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 bg-[#0d4a66] text-white py-2 px-4 rounded-md hover:bg-[#0d4a99] font-semibold transition duration-200 disabled:opacity-50"
+                    className="flex-1 cursor-pointer bg-[#0d4a66] text-white py-2 px-4 rounded-md hover:bg-[#0d4a99] font-semibold transition duration-200 disabled:opacity-50"
                   >
                     {loading ? "Salvando..." : editingProduct ? "Atualizar" : "Criar"}
                   </button>

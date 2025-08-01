@@ -42,7 +42,7 @@ export default function LoginPage() {
       const data = await response.json();
 
       // Salva o token no localStorage
-      localStorage.setItem("access_token", data.token);
+      localStorage.setItem("twd", data.token);
       localStorage.setItem("refresh_token", data.refresh_token);
 
       // Atualiza o contexto de autenticação
@@ -56,7 +56,7 @@ export default function LoginPage() {
       });
 
       // Redireciona para a página principal
-      router.push("/loja");
+      router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao fazer login");
     } finally {
@@ -116,7 +116,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="flex items-center justify-center space-x-2">
+        {/* <div className="flex items-center justify-center space-x-2">
           <div className="h-px w-1/3 bg-gray-300" />
           <span className="text-sm text-gray-500">ou entre com</span>
           <div className="h-px w-1/3 bg-gray-300" />
@@ -135,7 +135,7 @@ export default function LoginPage() {
               height={24}
             />
           </button>
-        </div>
+        </div> */}
 
         <p className="text-center text-sm text-gray-600">
           Ainda não tem uma conta?{" "}

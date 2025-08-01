@@ -2,10 +2,101 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import Image from "next/image";
+import { useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 
+interface FormData {
+  nome: string;
+  email: string;
+  assunto: string;
+  mensagem: string;
+}
+
 export default function ContatoSection() {
+  const [formData, setFormData] = useState<FormData>({
+    nome: '',
+    email: '',
+    assunto: '',
+    mensagem: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validação básica
+    if (!formData.nome || !formData.email || !formData.assunto || !formData.mensagem) {
+      setMessage('Por favor, preencha todos os campos.');
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 5000);
+      return;
+    }
+
+    // Validação de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setMessage('Por favor, insira um email válido.');
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 5000);
+      return;
+    }
+
+    setIsLoading(true);
+    setMessage('');
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+      
+      const response = await fetch(`${apiUrl}/api/suportes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome: formData.nome,
+          email: formData.email,
+          assunto: formData.assunto,
+          mensagem: formData.mensagem,
+          data: new Date().toISOString(),
+          status: 'pendente'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao enviar mensagem. Tente novamente.');
+      }
+
+      setMessage('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+      setMessageType('success');
+      
+      // Limpar formulário
+      setFormData({
+        nome: '',
+        email: '',
+        assunto: '',
+        mensagem: ''
+      });
+
+      setTimeout(() => setMessage(''), 5000);
+    } catch (error) {
+      setMessage('Erro ao enviar mensagem. Tente novamente.');
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 5000);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <section id="contato" className="bg-blue-50  pt-20 pb-0">
       {/* Depoimentos */}
@@ -19,12 +110,13 @@ export default function ContatoSection() {
 
   <Swiper
     modules={[Navigation]}
-    spaceBetween={20}
+    spaceBetween={30}
     slidesPerView={1}
     navigation
     breakpoints={{
-      768: { slidesPerView: 2 },
-      1024: { slidesPerView: 3 },
+      640: { slidesPerView: 1, spaceBetween: 20 },
+      768: { slidesPerView: 2, spaceBetween: 30 },
+      1024: { slidesPerView: 3, spaceBetween: 30 },
     }}
     className="mb-20"
   >
@@ -33,60 +125,60 @@ export default function ContatoSection() {
         nome: "Mariana Lima",
         texto: "Excelente! Tive a melhor experiência. Voltarei com certeza!",
         estrelas: 5,
-        data: "18/02/2025"
+        data: "15/12/2024"
       },
       {
         nome: "Vinícius Miguel",
         texto: "Atendimento muito bom e ótimos produtos.",
         estrelas: 4,
-        data: "18/02/2025"
+        data: "03/01/2025"
       },
       {
         nome: "Fernanda Pereira",
         texto: "Loja linda, equipe atenciosa e ótimas opções de óculos.",
         estrelas: 5,
-        data: "18/02/2025"
+        data: "28/11/2024"
       },
       {
         nome: "João Batista",
         texto: "Atendimento impecável. Super recomendo!",
         estrelas: 5,
-        data: "18/02/2025"
+        data: "12/01/2025"
       },
       {
         nome: "Carla Mendes",
         texto: "Boa variedade e ótimo custo-benefício.",
         estrelas: 4,
-        data: "18/02/2025"
+        data: "07/12/2024"
       },
       {
         nome: "Lucas Araujo",
         texto: "Comprei meus óculos aqui e adorei!",
         estrelas: 5,
-        data: "18/02/2025"
+        data: "22/01/2025"
       },
     ].map((d, i) => (
-      <SwiperSlide key={i}>
-        <div className="bg-white border border-gray-200 p-6 rounded-2xl shadow-lg h-full flex flex-col justify-between transition-transform hover:scale-[1.05] hover:shadow-xl">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <Image
-                src={`/img/avatar-${i + 1}.jpg`} // você pode adaptar o caminho
-                alt={d.nome}
-                width={48}
-                height={48}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <div>
-                <p className="text-sm font-semibold text-black">{d.nome}</p>
-                <p className="text-xs text-gray-500">{d.data || "15/02/2025"}</p>
+      <SwiperSlide key={i} className="h-auto mb-4">
+        <div className="bg-white border border-gray-200 p-6 rounded-2xl shadow-lg h-full min-h-[200px] flex flex-col justify-between transition-transform hover:scale-[1.02] hover:shadow-xl">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-black">{d.nome}</p>
+                  <p className="text-yellow-500 text-sm">
+                    {"★".repeat(d.estrelas)}{"☆".repeat(5 - d.estrelas)}
+                  </p>
+                </div>
+                <p className="text-xs text-gray-500 text-left">{d.data}</p>
               </div>
             </div>
+            <p className="text-sm text-gray-700 leading-relaxed">{d.texto}</p>
           </div>
-          <p className="text-yellow-500 mb-2 text-sm">
-            {"★".repeat(d.estrelas)}{"☆".repeat(5 - d.estrelas)}
-          </p>
-          <p className="text-sm text-gray-700">{d.texto}</p>
         </div>
       </SwiperSlide>
     ))}
@@ -107,32 +199,72 @@ export default function ContatoSection() {
             <p className="text-sm text-gray-200 mb-10 max-w-xl mx-auto">
             Preencha os campos abaixo e entraremos em contato o mais breve possível. Estamos prontos para ajudar você a encontrar a melhor solução para a sua visão.
             </p>
-            <form className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+
+            {/* Mensagem de feedback */}
+            {message && (
+              <div className={`mb-6 p-4 rounded-md ${
+                messageType === 'success' 
+                  ? 'bg-green-100 border border-green-400 text-green-700' 
+                  : 'bg-red-100 border border-red-400 text-red-700'
+              }`}>
+                {message}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
             <input
                 type="text"
+                name="nome"
+                value={formData.nome}
+                onChange={handleInputChange}
                 placeholder="Nome"
-                className="p-3 border border-gray-300 rounded-md bg-white text-black"
+                required
+                disabled={isLoading}
+                className="p-3 border border-gray-300 rounded-md bg-white text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
             />
             <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 placeholder="Email"
-                className="p-3 border border-gray-300 rounded-md bg-white text-black"
+                required
+                disabled={isLoading}
+                className="p-3 border border-gray-300 rounded-md bg-white text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
             />
             <input
                 type="text"
+                name="assunto"
+                value={formData.assunto}
+                onChange={handleInputChange}
                 placeholder="Assunto"
-                className="md:col-span-2 p-3 border border-gray-300 rounded-md bg-white text-black"
+                required
+                disabled={isLoading}
+                className="md:col-span-2 p-3 border border-gray-300 rounded-md bg-white text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
             />
             <textarea
+                name="mensagem"
+                value={formData.mensagem}
+                onChange={handleInputChange}
                 placeholder="Mensagem"
-                // rows="4"
-                className="md:col-span-2 p-3 border border-gray-300 rounded-md bg-white text-black"
+                required
+                disabled={isLoading}
+                rows={4}
+                className="md:col-span-2 p-3 border border-gray-300 rounded-md bg-white text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 resize-vertical"
             />
             <button
                 type="submit"
-                className="md:col-span-2 bg-[#0d4a66] text-white font-medium py-3 cursor-pointer rounded-md hover:bg-[#0d4a99] transition"
+                disabled={isLoading}
+                className="md:col-span-2 bg-[#0d4a66] text-white font-medium py-3 cursor-pointer rounded-md hover:bg-[#0d4a99] transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-                Enviar
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                    Enviando...
+                  </>
+                ) : (
+                  'Enviar'
+                )}
             </button>
             </form>
         </div>
